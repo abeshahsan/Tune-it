@@ -11,4 +11,4 @@ class Filepaths:
 
 
 if __name__ == '__main__':
-    print(Filepaths.EDIT_TOOLBAR())
+    print(Filepaths.MAIN_WINDOW())
