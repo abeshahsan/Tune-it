@@ -1,0 +1,61 @@
+/* #label {
+    background-color: rgb(50, 50, 50)
+} */
+
+#canvas {
+    /*background-color: #931212;*/
+}
+
+.QRubberBand {
+    border: 2px solid red;
+    background-color: red;
+}
+
+/* #cancel_button {
+    border: 1px solid #4fa5f8;
+    background-color: #adcef8;
+    border-radius: 5px;
+    padding: 3px 3px;
+    color: black;
+    min-width: 40px;
+    font-size: 14px;
+} */
+
+QPushButton:hover {
+    border: 1px solid #4fa5f8;
+    background-color: #4fa5f8;
+}
+
+#blur_container {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: blue;
+}
+
+#error_label {
+    color: red;
+}
+
+QSlider {
+    background-color: transparent; /* Background color of the slider track */
+}
+
+QSlider::groove:horizontal {
+    height: 6px; /* Height of the slider track */
+    background: #c0c0c0; /* Color of the slider groove */
+}
+
+QSlider::sub-page:horizontal {
+    background: #9586f1; /* Color of the filled portion */
+}
+
+QSlider::add-page:horizontal {
+    background: #d3d3d3; /* Color of the unfilled portion */
+}
+
+QSlider::handle:horizontal {
+    width: 12px; /* Width of the slider handle */
+    background: #8270ef; /* Color of the slider handle */
+    margin: -3px 0; /* Positioning of the handle relative to the groove */
+    border-radius: 6px; /* Border radius to make it round */
+}
