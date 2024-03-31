@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>801</width>
+    <height>703</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>771</width>
-      <height>551</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -30,154 +30,126 @@
      <attribute name="title">
       <string>Original Audio</string>
      </attribute>
-     <widget class="QGraphicsView" name="graphicsView">
+     <widget class="QWidget" name="horizontalWidget" native="true">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
-        <width>741</width>
-        <height>201</height>
+        <y>310</y>
+        <width>751</width>
+        <height>161</height>
        </rect>
       </property>
+      <layout class="QHBoxLayout" name="horizontalLayout"/>
      </widget>
-     <widget class="QProgressBar" name="progressBar">
+     <widget class="QFrame" name="frame">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>230</y>
-        <width>761</width>
-        <height>16</height>
+        <y>460</y>
+        <width>733</width>
+        <height>161</height>
        </rect>
       </property>
-      <property name="value">
-       <number>24</number>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QLabel" name="label_3">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>30</y>
+         <width>49</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Title:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_4">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>30</y>
+         <width>441</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>AudioFile.mp3</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_7">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>50</y>
+         <width>49</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Location:</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_8">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>50</y>
+         <width>441</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>File/path//tomusic//audiofile</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_9">
+       <property name="geometry">
+        <rect>
+         <x>270</x>
+         <y>70</y>
+         <width>441</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>! min 33 seconds</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_10">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>70</y>
+         <width>49</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Duration</string>
+       </property>
+      </widget>
+      <widget class="QGraphicsView" name="graphicsView">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>151</width>
+         <height>131</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
-     <widget class="QSlider" name="horizontalSlider">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>250</y>
-        <width>160</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="AudioMax">
-      <property name="geometry">
-       <rect>
-        <x>210</x>
-        <y>250</y>
-        <width>21</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap>C:/Users/Hp/Downloads/audio-max.svg</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="AudioMin">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>250</y>
-        <width>21</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap>C:/Users/Hp/Downloads/noun-mute.svg</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="AudioPlay">
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>250</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio play.svg</normaloff>C:/Users/Hp/Downloads/audio play.svg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>25</width>
-        <height>25</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="AudioFastForward">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>250</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>25</width>
-        <height>25</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="AudioBackward">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>250</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio backward.svg</normaloff>C:/Users/Hp/Downloads/audio backward.svg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>25</width>
-        <height>25</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="AudioStop">
+     <widget class="QPushButton" name="AudioStop_3">
       <property name="geometry">
        <rect>
         <x>540</x>
-        <y>250</y>
+        <y>440</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -196,214 +168,21 @@
        </size>
       </property>
      </widget>
-     <widget class="QWidget" name="horizontalWidget" native="true">
+     <widget class="QGraphicsView" name="outputAmplitude_2">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>310</y>
-        <width>751</width>
-        <height>161</height>
+        <y>20</y>
+        <width>741</width>
+        <height>181</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_7">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_9">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QSlider" name="verticalSlider_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
      </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>0</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Spectrogram:</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="OutputAudio">
-     <attribute name="title">
-      <string>Equalized Audio</string>
-     </attribute>
-     <widget class="QPushButton" name="AudioBackward_2">
+     <widget class="QPushButton" name="AudioBackward_3">
       <property name="geometry">
        <rect>
         <x>420</x>
-        <y>250</y>
+        <y>440</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -422,13 +201,187 @@
        </size>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="graphicsView_2">
+     <widget class="QLabel" name="AudioMin_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>440</y>
+        <width>21</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>C:/Users/Hp/Downloads/noun-mute.svg</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSlider_3">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>440</y>
+        <width>160</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Amplitude_2">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>0</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Amplitude:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="AudioPlay_3">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>440</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>C:/Users/Hp/Downloads/audio play.svg</normaloff>C:/Users/Hp/Downloads/audio play.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>25</width>
+        <height>25</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="AudioFastForward_3">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>440</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>25</width>
+        <height>25</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="OutputAudioProgress_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>410</y>
+        <width>761</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+     <widget class="QGraphicsView" name="OutputSpectrogram_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
         <width>741</width>
-        <height>201</height>
+        <height>181</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Spectrogram_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>200</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Spectrogram:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="AudioMax_3">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>440</y>
+        <width>21</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>C:/Users/Hp/Downloads/audio-max.svg</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="OutputAudio">
+     <attribute name="title">
+      <string>Equalized Audio</string>
+     </attribute>
+     <widget class="QPushButton" name="AudioBackward_2">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>440</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>C:/Users/Hp/Downloads/audio backward.svg</normaloff>C:/Users/Hp/Downloads/audio backward.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>25</width>
+        <height>25</height>
+       </size>
+      </property>
+     </widget>
+     <widget class="QGraphicsView" name="OutputSpectrogram">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>741</width>
+        <height>181</height>
        </rect>
       </property>
      </widget>
@@ -436,7 +389,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>250</y>
+        <y>440</y>
         <width>21</width>
         <height>31</height>
        </rect>
@@ -455,7 +408,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>310</y>
+        <y>470</y>
         <width>751</width>
         <height>161</height>
        </rect>
@@ -640,7 +593,7 @@
       <property name="geometry">
        <rect>
         <x>540</x>
-        <y>250</y>
+        <y>440</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -663,7 +616,7 @@
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>250</y>
+        <y>440</y>
         <width>21</width>
         <height>31</height>
        </rect>
@@ -682,7 +635,7 @@
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>250</y>
+        <y>440</y>
         <width>160</width>
         <height>16</height>
        </rect>
@@ -691,11 +644,11 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="Spectrogram">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>0</y>
+        <y>200</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -704,11 +657,11 @@
        <string>Spectrogram:</string>
       </property>
      </widget>
-     <widget class="QProgressBar" name="progressBar_2">
+     <widget class="QProgressBar" name="OutputAudioProgress">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>230</y>
+        <y>410</y>
         <width>761</width>
         <height>16</height>
        </rect>
@@ -721,7 +674,7 @@
       <property name="geometry">
        <rect>
         <x>500</x>
-        <y>250</y>
+        <y>440</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -744,7 +697,7 @@
       <property name="geometry">
        <rect>
         <x>460</x>
-        <y>250</y>
+        <y>440</y>
         <width>31</width>
         <height>31</height>
        </rect>
@@ -763,6 +716,29 @@
        </size>
       </property>
      </widget>
+     <widget class="QGraphicsView" name="outputAmplitude">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>741</width>
+        <height>181</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Amplitude">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Amplitude:</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -771,7 +747,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>801</width>
      <height>22</height>
     </rect>
    </property>
