@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   data-name="Layer 1"
+   viewBox="0 0 512 640"
+   x="0px"
+   y="0px"
+   version="1.1"
+   id="svg543"
+   sodipodi:docname="audio backward.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs547" />
+  <sodipodi:namedview
+     id="namedview545"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.271875"
+     inkscape:cx="256.70762"
+     inkscape:cy="320.39312"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg543" />
+  <title
+     id="title535">media player</title>
+  <path
+     d="M256,0C114.62,0,0,114.62,0,256S114.62,512,256,512,512,397.38,512,256,397.38,0,256,0ZM376,200V312h0a24.19,24.19,0,0,1-24,23.91,24.76,24.76,0,0,1-4.16-.35A23.82,23.82,0,0,1,337,330.71l-73-51.05V312h0a24.19,24.19,0,0,1-24,23.91,24.64,24.64,0,0,1-4.15-.35A23.8,23.8,0,0,1,225,330.72l-77.44-54.2a24.46,24.46,0,0,1-5.26-4.29s0,0,0,0a25.88,25.88,0,0,1-2.34-3,24,24,0,0,1,7.53-33.76l77.59-54.31A24,24,0,0,1,264,199.9a0.14,0.14,0,0,1,0,.1h0v32.34l73.09-51.16a24,24,0,0,1,37.83,11.6c0.23,0.75.43,1.51,0.59,2.29a24.07,24.07,0,0,1,.49,4.84,0.31,0.31,0,0,1,0,.09h0Z"
+     id="path537" />
+  <metadata
+     id="metadata666">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>media player</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
