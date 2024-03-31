@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="InputAudio">
      <attribute name="title">
@@ -159,7 +159,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio-stop.svg</normaloff>C:/Users/Hp/Downloads/audio-stop.svg</iconset>
+        <normaloff>./assets/audio-stop.svg</normaloff>./assets/audio-stop.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -192,7 +192,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio backward.svg</normaloff>C:/Users/Hp/Downloads/audio backward.svg</iconset>
+        <normaloff>./assets/audio backward.svg</normaloff>./assets/audio backward.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -214,7 +214,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>C:/Users/Hp/Downloads/noun-mute.svg</pixmap>
+       <pixmap>./assets/noun-mute.svg</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -260,7 +260,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio play.svg</normaloff>C:/Users/Hp/Downloads/audio play.svg</iconset>
+        <normaloff>./assets/audio play.svg</normaloff>./assets/audio play.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -283,7 +283,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</iconset>
+        <normaloff>./assets/audio fastforward.svg</normaloff>./assets/audio fastforward.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -341,7 +341,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>C:/Users/Hp/Downloads/audio-max.svg</pixmap>
+       <pixmap>./assets/audio-max.svg</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -366,7 +366,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio backward.svg</normaloff>C:/Users/Hp/Downloads/audio backward.svg</iconset>
+        <normaloff>./assets/audio backward.svg</normaloff>./assets/audio backward.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -398,7 +398,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>C:/Users/Hp/Downloads/noun-mute.svg</pixmap>
+       <pixmap>./assets/noun-mute.svg</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -603,7 +603,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio-stop.svg</normaloff>C:/Users/Hp/Downloads/audio-stop.svg</iconset>
+        <normaloff>./assets/udio-stop.svg</normaloff>./assets/audio-stop.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -625,7 +625,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>C:/Users/Hp/Downloads/audio-max.svg</pixmap>
+       <pixmap>./assets/audio-max.svg</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -684,7 +684,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</normaloff>C:/Users/Hp/Downloads/audio fastforward.svg</iconset>
+        <normaloff>./assets/audio fastforward.svg</normaloff>./assets/audio fastforward.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -707,7 +707,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>C:/Users/Hp/Downloads/audio play.svg</normaloff>C:/Users/Hp/Downloads/audio play.svg</iconset>
+        <normaloff>./assets/audio play.svg</normaloff>./assets/audio play.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
