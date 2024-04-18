@@ -39,9 +39,9 @@ class UI_MainWindow(QMainWindow):
         self.play_pause_btn_org.clicked.connect(lambda: print("pressed"))
         
         
-             
-        mixer.init() 
-        mixer.music.set_volume(0.7)
+        self.mixer = mixer
+        self.mixer.init() 
+        self.mixer.music.set_volume(0.7)
 
 
     def choose_file(self):
@@ -109,7 +109,7 @@ class UI_MainWindow(QMainWindow):
     def load_audio_to_mixer(self):
         if self.audio_file_loaded.value:
             self.audio_file_loaded.value = False
-            mixer.music.load(self.audio_file_path)
-            mixer.music.play()
+            self.mixer.music.load(self.audio_file_path)
+            self.mixer.music.play()
             
         
