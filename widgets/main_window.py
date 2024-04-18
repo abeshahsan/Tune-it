@@ -11,7 +11,7 @@ from pygame import mixer
 class UI_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(Filepaths.MAIN_WINDOW(), self)
+        uic.loadUi(Filepaths.MAIN_WINDOW_V2(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
 
@@ -49,9 +49,9 @@ class UI_MainWindow(QMainWindow):
         """
         audio_file_path = self.choose_file()
         self.enable_all()
-        mixer.music.load(audio_file_path)
-        print(audio_file_path)
-        mixer.music.play()
+        # mixer.music.load(audio_file_path)
+        # print(audio_file_path)
+        # mixer.music.play()
 
     def enable_all(self):
         self.action_save_as.setEnabled(True)
