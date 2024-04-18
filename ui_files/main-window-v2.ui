@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="InputAudio">
      <attribute name="title">
@@ -246,7 +246,7 @@
        <string>Amplitude:</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="AudioPlay_3">
+     <widget class="QPushButton" name="play_pause_btn_org">
       <property name="geometry">
        <rect>
         <x>460</x>

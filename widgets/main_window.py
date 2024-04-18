@@ -3,10 +3,13 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+from pygame import mixer 
+
+
 import equlizer_operations
 from filepaths import Filepaths
+from utilites import *
 
-from pygame import mixer 
     
 class UI_MainWindow(QMainWindow):
     def __init__(self):
@@ -14,15 +17,29 @@ class UI_MainWindow(QMainWindow):
         uic.loadUi(Filepaths.MAIN_WINDOW_V2(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
+        
+        "initializing necessary objects"
+        self.audio_file_path = None
+        self.audio_file_loaded = ValueProperty(False)
+        
 
         """Loading necessary objects from the loaded ui."""
+        self.play_pause_btn_org = self.findChild(QPushButton, "play_pause_btn_org")
         
 
 
         """Some event handlers needed for different operations."""
+        self.action_save_as.setEnabled(False)
+        self.action_save.setEnabled(False)
+        
         self.action_open.triggered.connect(self.open_file)
         self.action_save_as.triggered.connect(self.save_new_file)
         
+        self.audio_file_loaded.valueChanged.connect(self.load_audio_to_mixer)
+        self.play_pause_btn_org.clicked.connect(lambda: print("pressed"))
+        
+        
+             
         mixer.init() 
         mixer.music.set_volume(0.7)
 
@@ -36,7 +53,7 @@ class UI_MainWindow(QMainWindow):
         filters = "Audio (*.mp3 *.wav)"
         filenames, _ = file_dialogue.getOpenFileNames(self, filter=filters)
         if not filenames:
-            return
+            return None
         return filenames[0]
 
     def open_file(self):
@@ -49,9 +66,12 @@ class UI_MainWindow(QMainWindow):
         """
         audio_file_path = self.choose_file()
         self.enable_all()
-        # mixer.music.load(audio_file_path)
-        # print(audio_file_path)
-        # mixer.music.play()
+        
+        if audio_file_path:
+            self.audio_file_path = audio_file_path
+        
+        self.audio_file_loaded.value = True
+        
 
     def enable_all(self):
         self.action_save_as.setEnabled(True)
@@ -86,3 +106,10 @@ class UI_MainWindow(QMainWindow):
         else:  # If the save-file is not created, call save_new_file()
             self.save_new_file()
 
+    def load_audio_to_mixer(self):
+        if self.audio_file_loaded.value:
+            self.audio_file_loaded.value = False
+            mixer.music.load(self.audio_file_path)
+            mixer.music.play()
+            
+        
