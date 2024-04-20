@@ -6,7 +6,7 @@ import pyqtgraph as pg
 from pygame import mixer 
 
 
-import equlizer_operations
+# import equlizer_operations
 from filepaths import Filepaths
 from utilites import *
 
