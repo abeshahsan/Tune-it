@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="editedAudio">
+   <widget class="QTabWidget" name="TabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -30,18 +30,7 @@
      <attribute name="title">
       <string>Original Audio</string>
      </attribute>
-     <widget class="QWidget" name="horizontalWidget" native="true">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>310</y>
-        <width>751</width>
-        <height>161</height>
-       </rect>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout"/>
-     </widget>
-     <widget class="QFrame" name="frame">
+     <widget class="QFrame" name="InputAudioFrame">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -56,7 +45,7 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="InputAudioTitleLabel">
        <property name="geometry">
         <rect>
          <x>190</x>
@@ -69,7 +58,7 @@
         <string>Title:</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="InputAudioFileName">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -82,7 +71,7 @@
         <string>AudioFile.mp3</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="InputAudioFilePathLabel">
        <property name="geometry">
         <rect>
          <x>190</x>
@@ -95,7 +84,7 @@
         <string>Location:</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="InputAudioFilePath">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -108,7 +97,7 @@
         <string>File/path//tomusic//audiofile</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="InputAudioDuration">
        <property name="geometry">
         <rect>
          <x>270</x>
@@ -121,7 +110,7 @@
         <string>! min 33 seconds</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="InputAudioDurationLabel">
        <property name="geometry">
         <rect>
          <x>190</x>
@@ -134,7 +123,7 @@
         <string>Duration</string>
        </property>
       </widget>
-      <widget class="QGraphicsView" name="graphicsView">
+      <widget class="QGraphicsView" name="InputAudioBg">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -145,7 +134,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="AudioStop_3">
+     <widget class="QPushButton" name="InputAudioStop">
       <property name="geometry">
        <rect>
         <x>540</x>
@@ -168,7 +157,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="outputAmplitude_2">
+     <widget class="PlotWidget" name="InputAudioAmplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -178,7 +167,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="AudioMin_3">
+     <widget class="QLabel" name="InputAudioMin">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -197,7 +186,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QSlider" name="horizontalSlider_3">
+     <widget class="QSlider" name="InputAudioVolumeSlider">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -210,7 +199,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="Amplitude_2">
+     <widget class="QLabel" name="InputAudioAmplitudeLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -223,7 +212,7 @@
        <string>Amplitude:</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="play_pause_btn_org">
+     <widget class="QPushButton" name="InputAudioPlay">
       <property name="geometry">
        <rect>
         <x>460</x>
@@ -246,7 +235,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="AudioFastForward_3">
+     <widget class="QPushButton" name="InputAudioPause">
       <property name="geometry">
        <rect>
         <x>500</x>
@@ -269,7 +258,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QProgressBar" name="OutputAudioProgress_2">
+     <widget class="QProgressBar" name="InputAudioProgress">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -282,7 +271,7 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="OutputSpectrogram_2">
+     <widget class="QGraphicsView" name="InputAudioSpectrogram">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -292,7 +281,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="Spectrogram_2">
+     <widget class="QLabel" name="InputAudioSpectrogramLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -305,7 +294,7 @@
        <string>Spectrogram:</string>
       </property>
      </widget>
-     <widget class="QLabel" name="AudioMax_3">
+     <widget class="QLabel" name="InputAudioMax">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -329,7 +318,7 @@
      <attribute name="title">
       <string>Equalized Audio</string>
      </attribute>
-     <widget class="QPushButton" name="AudioBackward_2">
+     <widget class="QPushButton" name="OutputAudioPlay">
       <property name="geometry">
        <rect>
         <x>420</x>
@@ -352,7 +341,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="OutputSpectrogram">
+     <widget class="QGraphicsView" name="OutputAudioSpectrogram">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -362,7 +351,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="AudioMin_2">
+     <widget class="QLabel" name="OutputAudioMin">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -381,7 +370,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QWidget" name="horizontalWidget_2" native="true">
+     <widget class="QWidget" name="OutputAudioSliderWidget" native="true">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -392,7 +381,7 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <spacer name="horizontalSpacer_19">
+        <spacer name="horizontalSpacer1">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -405,14 +394,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_17">
+        <widget class="QSlider" name="OuputAudioFilterSlider1">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_20">
+        <spacer name="horizontalSpacer2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -425,14 +414,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_18">
+        <widget class="QSlider" name="OuputAudioFilterSlider2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_21">
+        <spacer name="horizontalSpacer3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -445,14 +434,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_19">
+        <widget class="QSlider" name="OuputAudioFilterSlider3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_22">
+        <spacer name="horizontalSpacer4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -465,14 +454,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_20">
+        <widget class="QSlider" name="OuputAudioFilterSlider4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_23">
+        <spacer name="horizontalSpacer5">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -485,14 +474,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_21">
+        <widget class="QSlider" name="OuputAudioFilterSlider5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_24">
+        <spacer name="horizontalSpacer6">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -505,14 +494,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_22">
+        <widget class="QSlider" name="OuputAudioFilterSlider6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_25">
+        <spacer name="horizontalSpacer7">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -525,14 +514,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_23">
+        <widget class="QSlider" name="OuputAudioFilterSlider7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_26">
+        <spacer name="horizontalSpacer8">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -545,14 +534,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_24">
+        <widget class="QSlider" name="OuputAudioFilterSlider8">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_27">
+        <spacer name="horizontalSpacer9">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -566,7 +555,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QLabel" name="AudioMax_2">
+     <widget class="QLabel" name="OutputAudioMax">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -585,7 +574,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QSlider" name="horizontalSlider_2">
+     <widget class="QSlider" name="OutputAudioVolumeSlider">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -598,7 +587,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="Spectrogram">
+     <widget class="QLabel" name="OutputAudioSpectrogramLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -624,7 +613,7 @@
        <number>24</number>
       </property>
      </widget>
-     <widget class="QPushButton" name="AudioFastForward_2">
+     <widget class="QPushButton" name="OutputAudioStop">
       <property name="geometry">
        <rect>
         <x>500</x>
@@ -647,7 +636,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="AudioPlay_2">
+     <widget class="QPushButton" name="OutputAudioPause">
       <property name="geometry">
        <rect>
         <x>460</x>
@@ -670,7 +659,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="outputAmplitude">
+     <widget class="QGraphicsView" name="OutputAmplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -680,7 +669,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="Amplitude">
+     <widget class="QLabel" name="OutputAudioAmplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -741,6 +730,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>plotwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
