@@ -5,12 +5,12 @@ import os
 mixer.init() 
 
 # Loading the song 
-mixer.music.load('H:/UNI_STUFF/6th Sem/DSP Lab/Project/Ringtone.mp3') 
+mixer.music.load("D:/Songs/Justin-Bieber-Ghost.mp3") 
 
 # Setting the volume 
 mixer.music.set_volume(0.7) 
 
-# Start playing the song 
+# Start playing the song
 mixer.music.play() 
 
 # infinite loop 
