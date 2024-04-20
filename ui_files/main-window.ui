@@ -157,7 +157,7 @@
        </size>
       </property>
      </widget>
-     <widget class="PlotWidget" name="InputAudioAmplitude">
+     <widget class="CustomWidget" name="InputAudioAmplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -732,9 +732,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PlotWidget</class>
+   <class>CustomWidget</class>
    <extends>QGraphicsView</extends>
-   <header>plotwidget.h</header>
+   <header>Plotter.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
