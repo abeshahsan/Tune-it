@@ -9,6 +9,7 @@ from pygame import mixer
 import equlizer_operations
 from filepaths import Filepaths
 from utilites import *
+from plot import *
 
     
 class UI_MainWindow(QMainWindow):
@@ -25,8 +26,8 @@ class UI_MainWindow(QMainWindow):
         
 
         """Loading necessary objects from the loaded ui."""
-        self.play_pause_btn_org = self.findChild(QPushButton, "play_pause_btn_org")
-        
+        self.play_pause_btn_org = self.findChild(QPushButton, "InputAudioPlay")
+        self.play_pause_output_org = self.findChild(QPushButton, "OutputAudioPlay")
 
 
         """Some event handlers needed for different operations."""
@@ -38,7 +39,9 @@ class UI_MainWindow(QMainWindow):
         
         self.audio_file_loaded.valueChanged.connect(self.load_audio_to_mixer)
         self.play_pause_btn_org.clicked.connect(lambda: print("pressed"))
-        
+
+        self.play_pause_btn_org.clicked.connect(plot_graph)
+        self.play_pause_output_org.clicked.connect(plot_graph2)
         
         self.mixer = mixer
         self.mixer.init() 

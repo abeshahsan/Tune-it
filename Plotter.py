@@ -1,11 +1,12 @@
-class  CustomWidget(pg.GraphicsWindow):
-    pg.setConfigOption('background', 'w')
+import pyqtgraph as pg
+class  CustomWidget(pg.GraphicsView):
+ '''   pg.setConfigOption('background', 'w')
     pg.setConfigOption('foreground', 'k')
     ptr1 = 0
     def __init__(self, parent=None, **kargs):
-        pg.GraphicsWindow.__init__(self, **kargs)
+        pg.GraphicsView.__init__(self, **kargs)
         self.setParent(parent)
-        self.setWindowTitle('pyqtgraph example: Scrolling Plots')
+        self.setViewTitle('pyqtgraph example: Scrolling Plots')
         p1 = self.addPlot(labels =  {'left':'Voltage', 'bottom':'Time'})
         self.data1 = np.random.normal(size=10)
         self.data2 = np.random.normal(size=10)
@@ -27,7 +28,7 @@ class  CustomWidget(pg.GraphicsWindow):
                             # (see also: np.roll)
         self.data2[-1] = np.random.normal()
         self.curve2.setData(self.data2)
-        self.curve2.setPos(self.ptr1,0)
+        self.curve2.setPos(self.ptr1,0)'''
 
 if __name__ == '__main__':
     w = CustomWidget()
