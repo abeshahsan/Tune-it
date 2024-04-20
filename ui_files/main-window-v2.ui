@@ -178,29 +178,6 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="AudioBackward_3">
-      <property name="geometry">
-       <rect>
-        <x>420</x>
-        <y>440</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>assets/audio backward.svg</normaloff>assets/audio backward.svg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>25</width>
-        <height>25</height>
-       </size>
-      </property>
-     </widget>
      <widget class="QLabel" name="AudioMin_3">
       <property name="geometry">
        <rect>
@@ -283,7 +260,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>assets/audio fastforward.svg</normaloff>assets/audio fastforward.svg</iconset>
+        <normaloff>assets/audio pause.svg</normaloff>assets/audio pause.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -366,7 +343,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>assets/audio backward.svg</normaloff>assets/audio backward.svg</iconset>
+        <normaloff>assets/audio play.svg</normaloff>assets/audio play.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -589,29 +566,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QPushButton" name="AudioStop_2">
-      <property name="geometry">
-       <rect>
-        <x>540</x>
-        <y>440</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>assets/udio-stop.svg</normaloff>assets/udio-stop.svg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>25</width>
-        <height>25</height>
-       </size>
-      </property>
-     </widget>
      <widget class="QLabel" name="AudioMax_2">
       <property name="geometry">
        <rect>
@@ -684,7 +638,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>assets/audio fastforward.svg</normaloff>assets/audio fastforward.svg</iconset>
+        <normaloff>assets/audio-stop.svg</normaloff>assets/audio-stop.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -707,7 +661,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>assets/audio play.svg</normaloff>assets/audio play.svg</iconset>
+        <normaloff>assets/audio pause.svg</normaloff>assets/audio pause.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -748,7 +702,7 @@
      <x>0</x>
      <y>0</y>
      <width>801</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
