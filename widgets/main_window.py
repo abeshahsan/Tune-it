@@ -17,8 +17,7 @@ class UI_MainWindow(QMainWindow):
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
-        
-        
+    
 
         "initializing necessary objects"
         self.audio_file_path = None
