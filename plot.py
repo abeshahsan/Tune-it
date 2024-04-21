@@ -2,7 +2,7 @@ import scipy.fft
 def plot_graph(self):
     global sampling_rate
     global samples
-    sampling_rate, samples = scipy.io.wavfile.read(data)
+    sampling_rate, samples = scipy.io.wavfile.read(self.audio_file_loaded.value)
     self.InputAudioAmplitude.clear()
     peak_value = np.amax(samples)
     normalized_data = samples / peak_value
