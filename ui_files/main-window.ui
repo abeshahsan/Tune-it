@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="InputAudio">
      <attribute name="title">
@@ -682,7 +682,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="OutputAmplitude">
+     <widget class="PlotWidget" name="OutputAudioAmplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -692,7 +692,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="OutputAudioAmplitude">
+     <widget class="QLabel" name="OutputAudioAmplitudeLabel">
       <property name="geometry">
        <rect>
         <x>10</x>

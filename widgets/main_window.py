@@ -2,7 +2,7 @@ from PyQt6 import uic
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
-from pyqtgraph import PlotWidget
+import pyqtgraph as pg
 from pygame import mixer 
 import numpy as np
 
@@ -28,7 +28,7 @@ class UI_MainWindow(QMainWindow):
 
         """Loading necessary objects from the loaded ui."""
         self.play_pause_btn_org = self.findChild(QPushButton, "InputAudioPlay")
-        self.play_pause_output_org = self.findChild(QPushButton, "OutputAudioPlay")
+        self.play_pause_btn_edt = self.findChild(QPushButton, "OutputAudioPlay")
 
 
         """Some event handlers needed for different operations."""
@@ -40,6 +40,7 @@ class UI_MainWindow(QMainWindow):
         
         self.audio_file_loaded.valueChanged.connect(self.load_audio_to_mixer)
         self.play_pause_btn_org.clicked.connect(lambda: print("pressed"))
+        self.play_pause_btn_edt.clicked.connect(self.plotOutputAmplitude)
 
         
         
@@ -116,16 +117,11 @@ class UI_MainWindow(QMainWindow):
             self.audio_file_loaded.value = False
             self.mixer.music.load(self.audio_file_path)
             self.mixer.music.play()
-            self.plot()
-
-    def plot(self):
-        x = np.random.normal(size=1000)
-        y = np.random.normal(size=(3,1000))
-        for i in range(3):
-            self.InputAudioAmplitude.plot(x,y[i],pen=(i,3))
+            self.plotInputAmplitude()
 
     def plotInputAmplitude(self):
-        sampling_rate, samples = scipy.io.wavfile.read(self.audio_file_loaded.value)
+        sampling_rate=25
+        samples = np.array([5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,])
         self.InputAudioAmplitude.clear()
         peak_value = np.amax(samples)
         normalized_data = samples / peak_value
@@ -134,10 +130,23 @@ class UI_MainWindow(QMainWindow):
         drawing_pen = pg.mkPen(color=(255, 0, 0), width=0.5)
         self.InputAudioAmplitude.plotItem.setLabel(axis='left', text='Amplitude')
         self.InputAudioAmplitude.plotItem.setLabel(axis='bottom', text='time [s]')
-        # self.InputAudioAmplitude.plotItem.getViewBox().setLimits(xMin=0, xMax=np.max(time), yMin=-1.1, yMax=1.1)
+        #self.InputAudioAmplitude.plotItem.getViewBox().setLimits(xMin=0, xMax=np.max(time), yMin=-1.1, yMax=1.1)
         self.InputAudioAmplitude.setXRange(0, 0.1)
         self.InputAudioAmplitude.plot(time, normalized_data, pen=drawing_pen)
-        logging.info('User is ploting the original signal')
 
+    def plotOutputAmplitude(self):
+        sampling_rate=25
+        samples = np.array([5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,])
+        self.OutputAudioAmplitude.clear()
+        peak_value = np.amax(samples)
+        normalized_data = samples / peak_value
+        length = samples.shape[0] / sampling_rate
+        time = list(np.linspace(0, length, samples.shape[0]))
+        drawing_pen = pg.mkPen(color=(255, 0, 0), width=0.5)
+        self.OutputAudioAmplitude.plotItem.setLabel(axis='left', text='Amplitude')
+        self.OutputAudioAmplitude.plotItem.setLabel(axis='bottom', text='time [s]')
+        #self.InputAudioAmplitude.plotItem.getViewBox().setLimits(xMin=0, xMax=np.max(time), yMin=-1.1, yMax=1.1)
+        self.OutputAudioAmplitude.setXRange(0, 0.1)
+        self.OutputAudioAmplitude.plot(time, normalized_data, pen=drawing_pen)
   
         
