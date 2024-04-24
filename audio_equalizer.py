@@ -6,7 +6,7 @@ import numpy as np
 class audio_equalizer:
     def __init__(self):
 
-        self.audio_file_path = "D:/Songs/Justin-Bieber-Ghost.mp3"
+        self.audio_file_path = "input_audio.mp3"
         self.channels = None
         self.frame_rate = None
         self.sample_width = None
@@ -26,6 +26,7 @@ class audio_equalizer:
         self.audio_array = np.frombuffer(raw_audio_data, dtype=np.int16)
 
         print("Shape of audio array:", self.audio_array.shape)
+        print(type(self.audio_array))
    
 
     def numpy_to_audio(self):
@@ -35,7 +36,7 @@ class audio_equalizer:
         # Export the audio to a file
         audio.export("output_audio.mp3", format="mp3")
 
-    
-a = audio_equalizer()
-a.audio_to_numpy()
-a.numpy_to_audio()
+if __name__ == "__main__":
+    a = audio_equalizer()
+    a.audio_to_numpy()
+    a.numpy_to_audio()
