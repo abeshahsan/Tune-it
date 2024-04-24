@@ -10,6 +10,13 @@ import equlizer_operations
 from filepaths import Filepaths
 from utilites import *
 
+from pydub import AudioSegment
+from pydub.playback import play
+
+# file = AudioSegment.from_file(file="input_audio.mp3",
+#                                   format="mp3")
+# play(file)
+
     
 class UI_MainWindow(QMainWindow):
     def __init__(self):

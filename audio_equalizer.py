@@ -1,4 +1,5 @@
 from pydub import AudioSegment
+from pydub.playback import play
 import numpy as np
 
 # import widgets
@@ -14,6 +15,7 @@ class audio_equalizer:
     def audio_to_numpy(self):
         # Load the audio file
         audio = AudioSegment.from_file(self.audio_file_path, format="mp3")
+        play(audio)
         
         self.channels = audio.channels
         self.frame_rate = audio.frame_rate
@@ -40,3 +42,28 @@ if __name__ == "__main__":
     a = audio_equalizer()
     a.audio_to_numpy()
     a.numpy_to_audio()
+
+
+# import pygame
+# import numpy as np
+
+# # Initialize Pygame
+# pygame.mixer.init()
+
+# # Load the audio file
+# pygame.mixer.init()
+# pygame.mixer.music.load('H:/UNI_STUFF/6th Sem/DSP Lab/Project/Tune-it/input_audio.mp3')  # Replace 'your_audio_file.wav' with your audio file path
+
+# pygame.mixer.music.play()
+
+# pygame.mixer.music.set_volume(0.7) 
+
+# # # Get the audio data as a numpy array
+# # sound = pygame.mixer.Sound('input_audio.mp3')
+# # array = pygame.sndarray.array(sound)
+
+# # # Print the numpy array
+# # print(array)
+
+# # Quit Pygame
+# # pygame.quit()
