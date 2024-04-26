@@ -1,19 +1,22 @@
-from PyQt6 import uic
+from PyQt6 import QtWidgets,uic
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import pyqtgraph as pg
 from pygame import mixer 
 import numpy as np
+import librosa
+from scipy import signal
+from scipy.fft import fftshift
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 
 # import equlizer_operations
 from filepaths import Filepaths
 from utilites import *
-
-
-
+from mplwidget import MplWidget
     
-class UI_MainWindow(QMainWindow):
+class UI_MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
@@ -29,7 +32,10 @@ class UI_MainWindow(QMainWindow):
         """Loading necessary objects from the loaded ui."""
         self.play_pause_btn_org = self.findChild(QPushButton, "InputAudioPlay")
         self.play_pause_btn_edt = self.findChild(QPushButton, "OutputAudioPlay")
-
+        self.finish_play_btn_org = self.findChild(QPushButton,"InputAudioStop")
+        self.rewind_play_btn_org = self.findChild(QPushButton,"InputAudioRestart")
+        self.finish_play_btn_edt = self.findChild(QPushButton,"OutputAudioStop")
+        self.rewind_play_btn_edt = self.findChild(QPushButton,"OutputAudioRestart")
 
         """Some event handlers needed for different operations."""
         self.action_save_as.setEnabled(False)
@@ -40,9 +46,6 @@ class UI_MainWindow(QMainWindow):
         
         self.audio_file_loaded.valueChanged.connect(self.load_audio_to_mixer)
         self.play_pause_btn_org.clicked.connect(lambda: print("pressed"))
-        self.play_pause_btn_edt.clicked.connect(self.plotOutputAmplitude)
-
-        
         
         self.mixer = mixer
         self.mixer.init() 
@@ -117,36 +120,81 @@ class UI_MainWindow(QMainWindow):
             self.audio_file_loaded.value = False
             self.mixer.music.load(self.audio_file_path)
             self.mixer.music.play()
-            self.plotInputAmplitude()
 
-    def plotInputAmplitude(self):
-        sampling_rate=25
-        samples = np.array([5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,])
+            # Load audio file using librosa
+            y, sr = librosa.load(self.audio_file_path)
+
+            self.plotInputAmplitude(y, sr)
+            self.plotInputSpectrogram(y, sr)
+            self.play_pause_btn_edt.clicked.connect(lambda: self.plotOutputAmplitude(y,sr))
+            self.play_pause_btn_edt.clicked.connect(lambda: self.plotOutputSpectrogram(y,sr))
+
+
+    def plotInputAmplitude(self, y, sr):
         self.InputAudioAmplitude.clear()
-        peak_value = np.amax(samples)
-        normalized_data = samples / peak_value
-        length = samples.shape[0] / sampling_rate
-        time = list(np.linspace(0, length, samples.shape[0]))
-        drawing_pen = pg.mkPen(color=(255, 0, 0), width=0.5)
-        self.InputAudioAmplitude.plotItem.setLabel(axis='left', text='Amplitude')
-        self.InputAudioAmplitude.plotItem.setLabel(axis='bottom', text='time [s]')
-        #self.InputAudioAmplitude.plotItem.getViewBox().setLimits(xMin=0, xMax=np.max(time), yMin=-1.1, yMax=1.1)
-        self.InputAudioAmplitude.setXRange(0, 0.1)
-        self.InputAudioAmplitude.plot(time, normalized_data, pen=drawing_pen)
-
-    def plotOutputAmplitude(self):
-        sampling_rate=25
-        samples = np.array([5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,5,0,10,0,5,])
-        self.OutputAudioAmplitude.clear()
-        peak_value = np.amax(samples)
-        normalized_data = samples / peak_value
-        length = samples.shape[0] / sampling_rate
-        time = list(np.linspace(0, length, samples.shape[0]))
-        drawing_pen = pg.mkPen(color=(255, 0, 0), width=0.5)
-        self.OutputAudioAmplitude.plotItem.setLabel(axis='left', text='Amplitude')
-        self.OutputAudioAmplitude.plotItem.setLabel(axis='bottom', text='time [s]')
-        #self.InputAudioAmplitude.plotItem.getViewBox().setLimits(xMin=0, xMax=np.max(time), yMin=-1.1, yMax=1.1)
-        self.OutputAudioAmplitude.setXRange(0, 0.1)
-        self.OutputAudioAmplitude.plot(time, normalized_data, pen=drawing_pen)
-  
         
+        peak_value = np.max(np.abs(y))
+        normalized_data = y / peak_value
+        sampling_rate = sr
+        plot_samples = normalized_data[::sampling_rate]
+
+        length = plot_samples.shape[0]
+        time = np.linspace(0, (length - 1) * (1 / sr), length)
+
+        self.InputAudioAmplitude.plot(time, plot_samples, pen='b')
+
+        self.InputAudioAmplitude.setLabel(axis='left', text='Amplitude',)
+        self.InputAudioAmplitude.setLabel(axis='bottom', text='Time (s)',) 
+        self.InputAudioAmplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
+        self.InputAudioAmplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.5, 0.1, 0.1)
+
+
+    def plotOutputAmplitude(self, y, sr):
+        self.OutputAudioAmplitude.clear()
+
+        peak_value = np.max(np.abs(y))
+        normalized_data = y / peak_value
+        sampling_rate = sr
+        plot_samples = normalized_data[::sampling_rate]  
+
+        length = plot_samples.shape[0]
+        time = np.linspace(0, (length - 1) * (1 / sr), length)
+
+        self.OutputAudioAmplitude.plot(time, plot_samples, pen='b')
+
+        self.OutputAudioAmplitude.setLabel(axis='left', text='Amplitude')
+        self.OutputAudioAmplitude.setLabel(axis='bottom', text='Time (s)') 
+        self.InputAudioAmplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
+        self.OutputAudioAmplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.1, 0.1, 0.1)
+
+    def plotInputSpectrogram(self, y, sr):
+        self.InputAudioSpectrogram.canvas.axes.clear()
+
+        # Computes FFT and plots the spectrogram
+        Pxx, freqs, bins, im = self.InputAudioSpectrogram.canvas.axes.specgram(y, Fs=sr)
+
+        self.InputAudioSpectrogram.canvas.axes.set_xlabel('Time [s]')
+        self.InputAudioSpectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
+
+        plt.colorbar(im, ax=self.InputAudioSpectrogram.canvas.axes)
+        plt.tight_layout()
+
+        self.InputAudioSpectrogram.canvas.draw()
+
+    def plotOutputSpectrogram(self, y, sr):
+        self.OutputAudioSpectrogram.canvas.axes.clear()
+
+        # Computes FFT and plots the spectrogram
+        Pxx, freqs, bins, im = self.OutputAudioSpectrogram.canvas.axes.specgram(y, Fs=sr)
+
+        self.OutputAudioSpectrogram.canvas.axes.set_xlabel('Time [s]')
+        self.OutputAudioSpectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
+
+        plt.colorbar(im, ax=self.OutputAudioSpectrogram.canvas.axes)
+        plt.tight_layout()
+
+        self.OutputAudioSpectrogram.canvas.draw()
+    
+  
+
+
