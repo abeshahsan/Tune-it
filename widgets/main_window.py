@@ -136,12 +136,9 @@ class UI_MainWindow(QtWidgets.QMainWindow):
         peak_value = np.max(np.abs(y))
         normalized_data = y / peak_value
         sampling_rate = sr
-        plot_samples = normalized_data[::sampling_rate]
-
-        length = plot_samples.shape[0]
-        time = np.linspace(0, (length - 1) * (1 / sr), length)
-
-        self.InputAudioAmplitude.plot(time, plot_samples, pen='b')
+        length = normalized_data.shape[0]
+        time = np.linspace(0, length / sampling_rate, num=length)
+        self.InputAudioAmplitude.plot(time, normalized_data, pen='b')
 
         self.InputAudioAmplitude.setLabel(axis='left', text='Amplitude',)
         self.InputAudioAmplitude.setLabel(axis='bottom', text='Time (s)',) 
@@ -155,23 +152,20 @@ class UI_MainWindow(QtWidgets.QMainWindow):
         peak_value = np.max(np.abs(y))
         normalized_data = y / peak_value
         sampling_rate = sr
-        plot_samples = normalized_data[::sampling_rate]  
-
-        length = plot_samples.shape[0]
-        time = np.linspace(0, (length - 1) * (1 / sr), length)
-
-        self.OutputAudioAmplitude.plot(time, plot_samples, pen='b')
+        length = normalized_data.shape[0]
+        time = np.linspace(0, length / sampling_rate, num=length)
+        self.OutputAudioAmplitude.plot(time, normalized_data, pen='b')
 
         self.OutputAudioAmplitude.setLabel(axis='left', text='Amplitude')
         self.OutputAudioAmplitude.setLabel(axis='bottom', text='Time (s)') 
-        self.InputAudioAmplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
+        self.OutputAudioAmplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
         self.OutputAudioAmplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.1, 0.1, 0.1)
 
     def plotInputSpectrogram(self, y, sr):
         self.InputAudioSpectrogram.canvas.axes.clear()
 
         # Computes FFT and plots the spectrogram
-        Pxx, freqs, bins, im = self.InputAudioSpectrogram.canvas.axes.specgram(y, Fs=sr)
+        Pxx, freqs, bins, im = self.InputAudioSpectrogram.canvas.axes.specgram(y,NFFT=1024, Fs=sr,noverlap=900)
 
         self.InputAudioSpectrogram.canvas.axes.set_xlabel('Time [s]')
         self.InputAudioSpectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
@@ -185,7 +179,7 @@ class UI_MainWindow(QtWidgets.QMainWindow):
         self.OutputAudioSpectrogram.canvas.axes.clear()
 
         # Computes FFT and plots the spectrogram
-        Pxx, freqs, bins, im = self.OutputAudioSpectrogram.canvas.axes.specgram(y, Fs=sr)
+        Pxx, freqs, bins, im = self.OutputAudioSpectrogram.canvas.axes.specgram(y,NFFT=1024, Fs=sr,noverlap=900)
 
         self.OutputAudioSpectrogram.canvas.axes.set_xlabel('Time [s]')
         self.OutputAudioSpectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
