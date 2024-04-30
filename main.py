@@ -1,6 +1,7 @@
 import sys
 from widgets import main_window
 from PyQt6.QtWidgets import QApplication
+import pyqtgraph as pg
 
 
 def add_stylesheet_to_app(app):
