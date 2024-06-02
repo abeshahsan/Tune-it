@@ -196,7 +196,3 @@ class UI_MainWindow(QtWidgets.QMainWindow):
         plt.tight_layout()
 
         self.OutputAudioSpectrogram.canvas.draw()
-    
-  
-
-
