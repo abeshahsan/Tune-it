@@ -1,6 +1,7 @@
 import numpy as np
 from PyQt6.QtCore import QObject, pyqtSignal
 from PyQt6.QtGui import QPixmap, QImage
+from pydub import AudioSegment
 
 
 class ValueProperty(QObject):

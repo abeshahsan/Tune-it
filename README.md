@@ -14,16 +14,16 @@ To run any Python or pip command in your project, you will need to activate the 
 But you can ignore this part if you don't create a virtual environment and install them globally. \
 To create a virtual environment in your project folder:
 ```
-python -m venv .venv
+python -m venv .env
 ```
 
 ### Activate the virtual environment
 ```
-.\.venv\Scripts\activate
+.\.env\Scripts\activate
 ```
 If you activate the virtual env, all commands, and packages will be controlled from the '.venv' folder.
 \
-The interpreter will be: .venv/Scripts/python.exe
+The interpreter will be: .env/Scripts/python.exe
 \
 And The libraries will be in .venv/Lib
 
