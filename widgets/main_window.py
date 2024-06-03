@@ -29,9 +29,11 @@ class UI_MainWindow(QMainWindow):
 
         """Loading necessary objects from the loaded ui."""
         self.play_pause_btn_org = self.findChild(QPushButton, "play_pause_btn_org")
+        self.stop_btn_org = self.findChild(QPushButton, "stop_btn_org")
         
 
         self.audio_equalizer = AudioEqualizer()
+
 
         """Some event handlers needed for different operations."""
         self.action_save_as.setEnabled(False)
@@ -42,8 +44,20 @@ class UI_MainWindow(QMainWindow):
         
         self.audio_file_selected.valueChanged.connect(self.load_audio)
         self.play_pause_btn_org.clicked.connect(self.play_pause_audio)
+        self.stop_btn_org.clicked.connect(self.stop_audio)
+
         
         self.process = None
+
+        """Frequency sliders"""
+        self.band_sliders = [
+            self.findChild(QSlider, f"band_slider_{i}") for i in range(1, 9)
+        ]
+        # print(self.band_sliders)
+
+        for i, slider in enumerate(self.band_sliders):
+            slider.valueChanged.connect(lambda value, band=i: self.audio_equalizer.set_gain(band, value))
+
         
     
     def closeEvent(self, event):

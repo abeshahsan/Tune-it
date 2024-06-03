@@ -145,7 +145,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="AudioStop_3">
+     <widget class="QPushButton" name="stop_btn_org">
       <property name="geometry">
        <rect>
         <x>540</x>
@@ -428,7 +428,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_17">
+        <widget class="QSlider" name="band_slider_1">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -448,7 +448,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_18">
+        <widget class="QSlider" name="band_slider_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -468,7 +468,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_19">
+        <widget class="QSlider" name="band_slider_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -488,7 +488,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_20">
+        <widget class="QSlider" name="band_slider_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -508,7 +508,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_21">
+        <widget class="QSlider" name="band_slider_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -528,7 +528,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_22">
+        <widget class="QSlider" name="band_slider_6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -548,7 +548,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_23">
+        <widget class="QSlider" name="band_slider_7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -568,7 +568,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="verticalSlider_24">
+        <widget class="QSlider" name="band_slider_8">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -748,7 +748,7 @@
      <x>0</x>
      <y>0</y>
      <width>801</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

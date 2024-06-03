@@ -394,7 +394,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider1">
+        <widget class="QSlider" name="OutputAudioFilterSlider1">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -414,7 +414,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider2">
+        <widget class="QSlider" name="OutputAudioFilterSlider2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -434,7 +434,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider3">
+        <widget class="QSlider" name="OutputAudioFilterSlider3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -454,7 +454,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider4">
+        <widget class="QSlider" name="OutputAudioFilterSlider4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -474,7 +474,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider5">
+        <widget class="QSlider" name="OutputAudioFilterSlider5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -494,7 +494,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider6">
+        <widget class="QSlider" name="OutputAudioFilterSlider6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -514,7 +514,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider7">
+        <widget class="QSlider" name="OutputAudioFilterSlider7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -534,7 +534,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="OuputAudioFilterSlider8">
+        <widget class="QSlider" name="OutputAudioFilterSlider8">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>

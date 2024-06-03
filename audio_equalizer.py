@@ -6,6 +6,7 @@ from pydub.utils import mediainfo
 from multiprocessing import Process, freeze_support
 from copy import deepcopy
 from pydub.playback import _play_with_simpleaudio, play
+from scipy.signal import butter, lfilter
 
 class AudioEqualizer:
     def __init__(self):
@@ -20,6 +21,7 @@ class AudioEqualizer:
         self.current_time = None
         self.elapsed_time = 0
         self.playing_audio = None
+        self.gains = [0] * 8  # Initialize gains for 8 bands
         
         freeze_support()
     
@@ -100,6 +102,47 @@ class AudioEqualizer:
         
         self.audio = self.numpy_to_audio(np.pad(self.audio_array[from_sample:], (0, remainder), mode='constant'),
                                          sample_rate, sample_width, channels)
+        
+
+
+    def butter_bandpass(self, lowcut, highcut, fs, order=5):
+        nyquist = 0.5 * fs
+        low = lowcut / nyquist
+        high = highcut / nyquist
+        b, a = butter(order, [low, high], btype='band')
+        return b, a
+
+    def apply_gain(self, band, gain):
+        fs = self.audio.frame_rate
+        band_filters = [
+            (20, 60), (60, 170), (170, 310), (310, 600), 
+            (600, 1000), (1000, 3000), (3000, 6000), (6000, 20000)
+        ]
+        low, high = band_filters[band]
+        b, a = self.butter_bandpass(low, high, fs)
+        filtered = lfilter(b, a, self.audio_array).astype(np.int16)
+        self.audio_array = deepcopy(self.full_audio_array)
+        self.audio_array += gain * filtered
+
+        sample_width = self.audio.sample_width
+        channels = self.audio.channels
+        sample_rate = int(self.audio_metadata["sample_rate"])
+        
+        self.audio = self.numpy_to_audio(self.audio_array,
+                                         sample_rate, sample_width, channels)
+  
+
+    def set_gain(self, band, gain):
+        self.gains[band] = gain
+        self.apply_gain(band, gain)
+
+    # def get_audio_segment(self):
+    #     return AudioSegment(
+    #         self.audio_array.tobytes(), 
+    #         frame_rate=self.audio.frame_rate,
+    #         sample_width=self.audio.sample_width, 
+    #         channels=self.audio.channels
+    #     )
 
 
         
