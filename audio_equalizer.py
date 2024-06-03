@@ -120,7 +120,10 @@ class AudioEqualizer:
         ]
         low, high = band_filters[band]
         b, a = self.butter_bandpass(low, high, fs)
-        filtered = lfilter(b, a, self.audio_array).astype(np.int16)
+        filtered = lfilter(b, a, self.audio_array)
+        filtered = np.nan_to_num(filtered, nan=0.0, posinf=np.iinfo(np.int16).max, neginf=np.iinfo(np.int16).min)
+        filtered = np.clip(filtered, np.iinfo(np.int16).min, np.iinfo(np.int16).max)  # Clip values
+        filtered = filtered.astype(np.int16)
         self.audio_array = deepcopy(self.full_audio_array)
         self.audio_array += gain * filtered
 
