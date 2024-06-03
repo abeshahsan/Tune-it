@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="InputAudio">
      <attribute name="title">
@@ -429,6 +429,12 @@
        </item>
        <item>
         <widget class="QSlider" name="verticalSlider_17">
+         <property name="minimum">
+          <number>-12</number>
+         </property>
+         <property name="maximum">
+          <number>12</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
