@@ -1,41 +1,41 @@
-import time
-from PyQt6 import uic
+from PyQt6 import QtWidgets,uic
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
-
-from audio_equalizer import AudioEqualizer
-from filepaths import Filepaths
-from utilites import *
-import os
 import pyqtgraph as pg
+from pygame import mixer 
 import numpy as np
 import librosa
 from scipy import signal
 from scipy.fft import fftshift
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
-from multiprocessing import Process
+
+# import equlizer_operations
+from filepaths import Filepaths
 from utilites import *
 from mplwidget import MplWidget
-from pydub import playback
-from pydub.playback import play
     
-class UI_MainWindow(QMainWindow):
+class UI_MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
-        
+    
+
         "initializing necessary objects"
         self.audio_file_path = None
-        self.audio_file_selected = ValueProperty(False)
+        self.audio_file_loaded = ValueProperty(False)
+        
 
         """Loading necessary objects from the loaded ui."""
-        self.play_pause_btn_org = self.findChild(QPushButton, "play_pause_btn_org")
-        self.play_pause_btn_edt = self.findChild(QPushButton, "play_pause_btn_edt")
-        self.audio_equalizer = AudioEqualizer()
+        self.play_pause_btn_org = self.findChild(QPushButton, "InputAudioPlay")
+        self.play_pause_btn_edt = self.findChild(QPushButton, "OutputAudioPlay")
+        self.finish_play_btn_org = self.findChild(QPushButton,"InputAudioStop")
+        self.rewind_play_btn_org = self.findChild(QPushButton,"InputAudioRestart")
+        self.finish_play_btn_edt = self.findChild(QPushButton,"OutputAudioStop")
+        self.rewind_play_btn_edt = self.findChild(QPushButton,"OutputAudioRestart")
 
         """Some event handlers needed for different operations."""
         self.action_save_as.setEnabled(False)
@@ -44,17 +44,13 @@ class UI_MainWindow(QMainWindow):
         self.action_open.triggered.connect(self.open_file)
         self.action_save_as.triggered.connect(self.save_new_file)
         
-        self.audio_file_selected.valueChanged.connect(self.load_audio)
-        self.play_pause_btn_org.clicked.connect(self.play_pause_audio)
+        self.audio_file_loaded.valueChanged.connect(self.load_audio_to_mixer)
+        self.play_pause_btn_org.clicked.connect(lambda: print("pressed"))
         
-        self.process = None
-        
-    
-    def closeEvent(self, event):
-        # print("Closing the application.")
-        # self.audio_equalizer.stop_audio()
-        self.stop_audio()
-        event.accept()
+        self.mixer = mixer
+        self.mixer.init() 
+        self.mixer.music.set_volume(1.0)
+
 
     def choose_file(self):
         """
@@ -76,18 +72,21 @@ class UI_MainWindow(QMainWindow):
         * If you select an audio file, it loads the audio.
         :return:
         """
-        
         audio_file_path = self.choose_file()
+        self.enable_all()
         
         if audio_file_path:
             self.audio_file_path = audio_file_path
-            self.audio_file_selected.value = True
-            self.enable_all()
         
+        self.audio_file_loaded.value = True
+
         
+
     def enable_all(self):
         self.action_save_as.setEnabled(True)
         self.action_save.setEnabled(True)
+        # self.blur_select_button.setEnabled(True)
+        # self.rotate_button.setEnabled(True)
 
     def save_new_file(self):
         """
@@ -101,7 +100,8 @@ class UI_MainWindow(QMainWindow):
         file_path, _ = file_dialogue.getSaveFileName(filter=filters, parent=self)
         self.save_file_path = file_path
         if file_path:
-            self.audio_equalizer.save_audio(file_path)
+            # save the audio file here
+            pass
 
     def save_file(self):
         """
@@ -110,60 +110,25 @@ class UI_MainWindow(QMainWindow):
         :return:
         """
         if self.save_file_path:
-            self.audio_equalizer.save_audio(self.save_file_path)
+            # save the audio file here
+            pass
         else:  # If the save-file is not created, call save_new_file()
             self.save_new_file()
 
-    def load_audio(self):
-        if self.audio_file_selected.value:
-            self.audio_file_selected.value = False
-            try:
-                self.audio_equalizer.load(self.audio_file_path)
-                self.play_audio()
-                y,sr=self.plot_input()
-                self.play_pause_btn_edt.clicked.connect=self.plot_output(y,sr)
-            except Exception as e:
-                print(e)
-                self.audio_file_selected.value = False
-    def play_pause_audio(self):
-        if self.audio_equalizer.is_playing:
-            self.pause_audio()
-        else:
-            self.play_audio()
+    def load_audio_to_mixer(self):
+        if self.audio_file_loaded.value:
+            self.audio_file_loaded.value = False
+            self.mixer.music.load(self.audio_file_path)
+            self.mixer.music.play()
 
-    
-    def plot_input(self):
-        try:
+            # Load audio file using librosa
             y, sr = librosa.load(self.audio_file_path)
+
             self.plotInputAmplitude(y, sr)
             self.plotInputSpectrogram(y, sr)
-            return y,sr
-        except Exception as e:
-            print(e)
-    def plot_output(self,y,sr):
-        try:
-            self.plotOutputAmplitude(y, sr)
-            self.plotOutputSpectrogram(y, sr)
-        except Exception as e:
-            print(e)
-            
-    def stop_audio(self):
-        self.process.terminate()
-        self.audio_equalizer.is_playing = False
-        self.audio_equalizer.elapsed_time = 0
-        
-    def play_audio(self):
-        self.audio_equalizer.start_time = time.time()
-        self.audio_equalizer.seek(self.audio_equalizer.elapsed_time)
-        self.process = Process(target=play, args=(self.audio_equalizer.audio,))
-        self.process.start()
-        self.audio_equalizer.is_playing = True
-    
-    def pause_audio(self):
-        self.audio_equalizer.current_time = time.time()
-        self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
-        self.process.terminate()
-        self.audio_equalizer.is_playing = False
+            self.play_pause_btn_edt.clicked.connect(lambda: self.plotOutputAmplitude(y,sr))
+            self.play_pause_btn_edt.clicked.connect(lambda: self.plotOutputSpectrogram(y,sr))
+
 
     def plotInputAmplitude(self, y, sr):
         self.InputAudioAmplitude.clear()

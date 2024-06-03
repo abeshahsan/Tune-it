@@ -196,7 +196,7 @@
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="InputAudioPause">
+     <widget class="QPushButton" name="play_pause_btn_org">
       <property name="geometry">
        <rect>
         <x>500</x>
