@@ -18,7 +18,7 @@ from pydub.playback import play
 class UI_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi(Filepaths.MAIN_WINDOW_V2(), self)
+        uic.loadUi(Filepaths.MAIN_WINDOW_V3(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
         
@@ -28,9 +28,12 @@ class UI_MainWindow(QMainWindow):
         
 
         """Loading necessary objects from the loaded ui."""
-        self.play_pause_btn_org = self.findChild(QPushButton, "play_pause_btn_org")
-        self.stop_btn_org = self.findChild(QPushButton, "stop_btn_org")
-        
+        self.play_pause_btn = self.findChild(QPushButton, "play_pause_btn")
+        self.stop_btn = self.findChild(QPushButton, "stop_btn")
+        self.volume_slider = self.findChild(QSlider, "volume_slider")
+        self.volume = self.volume_slider.value()
+        self.changed_volume = self.volume
+
 
         self.audio_equalizer = AudioEqualizer()
 
@@ -43,8 +46,9 @@ class UI_MainWindow(QMainWindow):
         self.action_save_as.triggered.connect(self.save_new_file)
         
         self.audio_file_selected.valueChanged.connect(self.load_audio)
-        self.play_pause_btn_org.clicked.connect(self.play_pause_audio)
-        self.stop_btn_org.clicked.connect(self.stop_audio)
+        self.play_pause_btn.clicked.connect(self.play_pause_audio)
+        self.stop_btn.clicked.connect(self.stop_audio)
+        self.volume_slider.valueChanged.connect(lambda value: self.change_volume(value))
 
         
         self.process = None
@@ -146,7 +150,7 @@ class UI_MainWindow(QMainWindow):
         
     def play_audio(self):
         self.audio_equalizer.start_time = time.time()
-        self.audio_equalizer.seek(self.audio_equalizer.elapsed_time)
+        self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
         self.process = Process(target=play, args=(self.audio_equalizer.audio,))
         self.process.start()
         self.audio_equalizer.is_playing = True
@@ -156,3 +160,12 @@ class UI_MainWindow(QMainWindow):
         self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
         self.process.terminate()
         self.audio_equalizer.is_playing = False
+
+    def change_volume(self, volume):
+        if self.audio_equalizer.audio is None:
+            raise Exception("Could not change volume. Audio file not loaded.")  
+        self.pause_audio()  
+        self.changed_volume = volume - self.volume
+        print(self.volume, volume)
+        self.volume = volume
+        self.play_audio()

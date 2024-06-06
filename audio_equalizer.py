@@ -85,7 +85,7 @@ class AudioEqualizer:
             raise Exception("Could not change volume. Audio file not loaded.")    
         self.audio += gain
     
-    def seek(self, time):
+    def seek(self, time, volume = 0):
         if self.audio is None:
             raise Exception("Could not seek audio. Audio file not loaded.")
         
@@ -102,7 +102,7 @@ class AudioEqualizer:
         
         self.audio = self.numpy_to_audio(np.pad(self.audio_array[from_sample:], (0, remainder), mode='constant'),
                                          sample_rate, sample_width, channels)
-        
+        self.audio +=volume
 
 
     def butter_bandpass(self, lowcut, highcut, fs, order=5):
@@ -149,10 +149,20 @@ class AudioEqualizer:
 
 
         
+# if __name__ == "__main__":
+#     a = AudioEqualizer()
+#     a.load("input_audio.mp3")
+#     p = Process(target=play, args=(a.audio,))
+#     p.start()
+#     time.sleep(5)
+#     p.terminate()
+
 if __name__ == "__main__":
     a = AudioEqualizer()
     a.load("input_audio.mp3")
+    a.seek(20)
+    a.audio -= 50
     p = Process(target=play, args=(a.audio,))
     p.start()
-    time.sleep(5)
+    time.sleep(10)
     p.terminate()
