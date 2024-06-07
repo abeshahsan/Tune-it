@@ -57,10 +57,10 @@ class UI_MainWindow(QMainWindow):
         self.band_sliders = [
             self.findChild(QSlider, f"band_slider_{i}") for i in range(1, 9)
         ]
-        # print(self.band_sliders)
+        
 
         for i, slider in enumerate(self.band_sliders):
-            slider.valueChanged.connect(lambda value, band=i: self.audio_equalizer.set_gain(band, value))
+            slider.valueChanged.connect(lambda : self.set_gain(self.band_sliders))
 
         
     
@@ -150,7 +150,7 @@ class UI_MainWindow(QMainWindow):
         
     def play_audio(self):
         self.audio_equalizer.start_time = time.time()
-        self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
+        # self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
         self.process = Process(target=play, args=(self.audio_equalizer.audio,))
         self.process.start()
         self.audio_equalizer.is_playing = True
@@ -168,4 +168,14 @@ class UI_MainWindow(QMainWindow):
         self.changed_volume = volume - self.volume
         print(self.volume, volume)
         self.volume = volume
+        self.play_audio()
+
+    def set_gain(self, band_sliders):
+        self.pause_audio()
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
+        
+        print(factors)
+        self.audio_equalizer.apply_gain(factors)
         self.play_audio()

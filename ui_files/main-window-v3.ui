@@ -196,10 +196,13 @@
      <item>
       <widget class="QSlider" name="band_slider_1">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -222,10 +225,13 @@
      <item>
       <widget class="QSlider" name="band_slider_2">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -248,10 +254,13 @@
      <item>
       <widget class="QSlider" name="band_slider_3">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -274,10 +283,13 @@
      <item>
       <widget class="QSlider" name="band_slider_4">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -300,10 +312,13 @@
      <item>
       <widget class="QSlider" name="band_slider_5">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -326,10 +341,13 @@
      <item>
       <widget class="QSlider" name="band_slider_6">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -352,10 +370,13 @@
      <item>
       <widget class="QSlider" name="band_slider_7">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -378,10 +399,13 @@
      <item>
       <widget class="QSlider" name="band_slider_8">
        <property name="minimum">
-        <number>-12</number>
+        <number>0</number>
        </property>
        <property name="maximum">
-        <number>12</number>
+        <number>4</number>
+       </property>
+       <property name="value">
+        <number>2</number>
        </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
