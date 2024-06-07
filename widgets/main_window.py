@@ -51,9 +51,9 @@ class UI_MainWindow(QMainWindow):
         self.volume_slider.valueChanged.connect(lambda value: self.change_volume(value))
 
         '''for presets'''
-        self.presets_combo = self.findChild(QComboBox, "presets_combo")
-        self.presets_combo.addItems(self.audio_equalizer.presets.keys())
-        self.presets_combo.activated[str].connect(self.apply_preset)
+        # self.presets_combo = self.findChild(QComboBox, "presets_combo")
+        # self.presets_combo.addItems(self.audio_equalizer.presets.keys())
+        # self.presets_combo.activated[str].connect(self.apply_preset)
 
         
         self.process = None

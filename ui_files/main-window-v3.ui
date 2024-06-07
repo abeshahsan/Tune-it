@@ -508,6 +508,65 @@
      </size>
     </property>
    </widget>
+   <widget class="QComboBox" name="presets_combo">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>360</y>
+      <width>201</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <property name="insertPolicy">
+     <enum>QComboBox::InsertAtBottom</enum>
+    </property>
+    <item>
+     <property name="text">
+      <string>Default Preset</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Rock</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Jazz</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Classical</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bass Boost</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Treble Boost</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Vocal Boost</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dance</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -515,7 +574,7 @@
      <x>0</x>
      <y>0</y>
      <width>801</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
