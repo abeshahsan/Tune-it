@@ -172,7 +172,7 @@ class AudioEqualizer:
         
         self.audio_array = deepcopy(modified_audio_array)
         self.audio = self.numpy_to_audio(self.audio_array, sample_rate, sample_width, channels)
-
+        return self.audio_array, sample_rate
     # def apply_gain(self, band, gain_dB):
     #     try:
     #         gain = 10 ** (gain_dB / 20)  # Convert dB to linear scale
@@ -221,10 +221,10 @@ class AudioEqualizer:
     #     except Exception as e:
     #         print(f"Error applying gain: {e}")
 
-    def set_gain(self, band, gain):
+    def set_gain(self, band, gain,y,sr):
         self.gains[band] = gain
-        self.apply_gain(band, gain)
-
+        y,sr = self.apply_gain(band, gain)
+        
     # def get_audio_segment(self):
     #     return AudioSegment(
     #         self.audio_array.tobytes(), 
@@ -232,7 +232,7 @@ class AudioEqualizer:
     #         sample_width=self.audio.sample_width, 
     #         channels=self.audio.channels
     #     )
-
+        
 
         
 # if __name__ == "__main__":
