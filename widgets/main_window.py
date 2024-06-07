@@ -25,12 +25,15 @@ from pydub.playback import play
 class UI_MainWindow(QMainWindow):
     def __init__(self):
 
-        
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW_V3(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
         
+        self.org_sr=3
+        self.eq_sr=2
+        self.org_y=None
+        self.eq_y=None
         "initializing necessary objects"
         self.audio_file_path = None
         self.audio_file_selected = ValueProperty(False)
@@ -70,7 +73,7 @@ class UI_MainWindow(QMainWindow):
         # print(self.band_sliders)
 
         for i, slider in enumerate(self.band_sliders):
-            slider.valueChanged.connect(lambda value, band=i: self.audio_equalizer.set_gain(band, value,self.eq_y,self.eq_sr))
+            slider.valueChanged.connect(lambda value, band=i: self.audio_equalizer.set_gain(band, value))
             
         
     
@@ -143,10 +146,8 @@ class UI_MainWindow(QMainWindow):
             self.audio_file_selected.value = False
             try:
                 self.audio_equalizer.load(self.audio_file_path)
-                y, sr = librosa.load(self.audio_file_path)
-                self.eq_y=y
-                self.eq_sr=sr
-                self.plot_input(y,sr)
+                self.org_y,self.org_sr=self.audio_equalizer.get_current_org_audio()
+                self.plot_input(self.org_y,self.org_sr)
                 self.play_audio()
             except Exception as e:
                 print(e)
@@ -155,6 +156,7 @@ class UI_MainWindow(QMainWindow):
         if self.audio_equalizer.is_playing:
             self.pause_audio()
         else:
+            self.eq_y,self.eq_sr=self.audio_equalizer.get_current_eq_audio()
             self.plot_output(self.eq_y,self.eq_sr)
             self.play_audio()
             
@@ -185,11 +187,11 @@ class UI_MainWindow(QMainWindow):
         self.volume = volume
         self.play_audio()
 
-    def plot_input(self,y,sr):
+    def plot_input(self,org_y,org_sr):
         try:
             
-            self.plotInputAmplitude(y, sr)
-            self.plotInputSpectrogram(y, sr)
+            self.plotInputAmplitude(org_y, org_sr)
+            self.plotInputSpectrogram(org_y, org_sr)
             
         except Exception as e:
             print(e)
@@ -200,21 +202,21 @@ class UI_MainWindow(QMainWindow):
         except Exception as e:
             print(e)
     
-    def plotInputAmplitude(self, y, sr):
+    def plotInputAmplitude(self, org_y, org_sr):
         self.org_amplitude.clear()
         
-        peak_value = np.max(np.abs(y))
-        normalized_data = y / peak_value
-        sampling_rate = sr
-        length = normalized_data.shape[0]
+        peak_value = np.max(np.abs(org_y))
+        normalized_data = org_y / peak_value
+        sampling_rate = org_sr
+        length = org_y.shape[0]
         time = np.linspace(0, length, num=length)
-        self.org_amplitude.plot(time, y, pen='b')
+        self.org_amplitude.plot(time, org_y, pen='b')
 
         self.org_amplitude.setLabel(axis='left', text='Amplitude',)
         self.org_amplitude.setLabel(axis='bottom', text='Time (s)',) 
         self.org_amplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
         self.org_amplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.5, 0.1, 0.1)
-        print("y",y)
+
 
 
 
@@ -232,18 +234,17 @@ class UI_MainWindow(QMainWindow):
         self.eq_amplitude.setLabel(axis='bottom', text='Time (s)') 
         self.eq_amplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
         self.eq_amplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.1, 0.1, 0.1)
-        print("eq_y",eq_y)
+       
 
-    def plotInputSpectrogram(self, y, sr):
+    def plotInputSpectrogram(self, org_y, org_sr):
         self.org_spectrogram.canvas.axes.clear()
-        peak_value = np.max(np.abs(y))
-        normalized_data = y / peak_value
-        length = normalized_data.shape[0]
+        length = org_y.shape[0]
         nfft_log=np.floor(np.log2(length))+1
         nfft_val=int(2**nfft_log)
         # Computes FFT and plots the spectrogram
-        Pxx, freqs, bins, im = self.org_spectrogram.canvas.axes.specgram(y, Fs=sr)
-
+        Pxx, freqs, bins, im = self.org_spectrogram.canvas.axes.specgram(org_y, Fs=org_sr)
+        print("Input Pxx",Pxx)
+        
         self.org_spectrogram.canvas.axes.set_xlabel('Time [s]')
         self.org_spectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
 
@@ -259,6 +260,8 @@ class UI_MainWindow(QMainWindow):
         nfft_val=int(2**nfft_log)
         # Computes FFT and plots the spectrogram
         Pxx, freqs, bins, im = self.eq_spectrogram.canvas.axes.specgram(eq_y, Fs=eq_sr)
+        print("Output Pxx",Pxx)
+        
 
         self.eq_spectrogram.canvas.axes.set_xlabel('Time [s]')
         self.eq_spectrogram.canvas.axes.set_ylabel('Frequency [Hz]')

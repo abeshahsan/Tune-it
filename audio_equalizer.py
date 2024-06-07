@@ -12,7 +12,10 @@ from scipy.fft import fft, ifft
 
 class AudioEqualizer:
     def __init__(self):
-        
+        self.org_y=None
+        self.org_sr=None
+        self.eq_y=None
+        self.eq_sr=None
         self.is_playing = False
         self.full_audio_array = None
         self.audio_file_path = None
@@ -36,11 +39,16 @@ class AudioEqualizer:
         self.audio_array = np.frombuffer(self.audio.raw_data, dtype=np.int16)
         self.full_audio_array = deepcopy(self.audio_array)
         self.audio_array = self.audio_to_numpy(self.audio)
+        self.org_y=self.audio_array
+        self.org_sr=int(self.audio_metadata["sample_rate"])
+
 
 
     def audio_to_numpy(self, audio):
         if audio is None:
             raise Exception("self.audio is None. Audio file not loaded.")
+        #print("In audio eq, Audio org",np.unique(self.audio_array))
+        #print("In audio eq, sr  org",int(self.audio_metadata["sample_rate"]))
         return np.frombuffer(self.audio.raw_data, dtype=np.int16)
             
 
@@ -95,7 +103,7 @@ class AudioEqualizer:
         sample_width = self.audio.sample_width
         channels = self.audio.channels
         sample_rate = int(self.audio_metadata["sample_rate"])
-
+        
         # Calculate the exact position in samples
         from_sample = int(time * sample_rate * sample_width)
 
@@ -172,7 +180,11 @@ class AudioEqualizer:
         
         self.audio_array = deepcopy(modified_audio_array)
         self.audio = self.numpy_to_audio(self.audio_array, sample_rate, sample_width, channels)
-        return self.audio_array, sample_rate
+        #print("In audio eq, audio EQ",np.unique(self.audio_array))
+        #print("In audio eq, sr  EQ",int(self.audio_metadata["sample_rate"]))
+        self.eq_y=self.audio_array
+        self.eq_sr=sample_rate
+        
     # def apply_gain(self, band, gain_dB):
     #     try:
     #         gain = 10 ** (gain_dB / 20)  # Convert dB to linear scale
@@ -221,9 +233,15 @@ class AudioEqualizer:
     #     except Exception as e:
     #         print(f"Error applying gain: {e}")
 
-    def set_gain(self, band, gain,y,sr):
+    def set_gain(self, band, gain):
         self.gains[band] = gain
-        y,sr = self.apply_gain(band, gain)
+        self.apply_gain(band, gain)
+
+    def get_current_eq_audio(self):
+        return self.eq_y, self.eq_sr
+    
+    def get_current_org_audio(self):
+        return self.org_y, self.org_sr
         
     # def get_audio_segment(self):
     #     return AudioSegment(
