@@ -174,7 +174,7 @@ class AudioEqualizer:
     #         sample_width=self.audio.sample_width, 
     #         channels=self.audio.channels
     #     )
-
+        
 
         
 # if __name__ == "__main__":

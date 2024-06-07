@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>801</width>
+    <width>867</width>
     <height>786</height>
    </rect>
   </property>
@@ -14,121 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tab_widget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>771</width>
-      <height>291</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>1</number>
-    </property>
-    <widget class="QWidget" name="original_audio_tab">
-     <attribute name="title">
-      <string>Original Audio</string>
-     </attribute>
-     <widget class="QLabel" name="org_amp_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>0</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Amplitude:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="org_spect_label">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>0</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Spectrogram:</string>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="org_amplitude">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>371</width>
-        <height>231</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="org_spectrogram">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>20</y>
-        <width>371</width>
-        <height>231</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="OutputAudio">
-     <attribute name="title">
-      <string>Equalized Audio</string>
-     </attribute>
-     <widget class="QLabel" name="eq_spect_label">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>0</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Spectrogram:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="eq_amp_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>0</y>
-        <width>71</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Amplitude:</string>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="eq_spectrogram">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>20</y>
-        <width>371</width>
-        <height>231</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="eq_amplitude">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>371</width>
-        <height>231</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </widget>
    <widget class="QSlider" name="volume_slider">
     <property name="geometry">
      <rect>
@@ -532,13 +417,154 @@
      </size>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>420</y>
+      <width>49</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Name:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>420</y>
+      <width>49</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>path</string>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="tab_widget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>851</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="original_audio_tab">
+     <attribute name="title">
+      <string>Original Audio</string>
+     </attribute>
+     <widget class="QLabel" name="org_amp_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Amplitude:</string>
+      </property>
+     </widget>
+     <widget class="MplWidget" name="org_spectrogram" native="true">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>20</y>
+        <width>401</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="org_amplitude">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>411</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="org_spect_label">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>0</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Spectrogram:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="OutputAudio">
+     <attribute name="title">
+      <string>Equalized Audio</string>
+     </attribute>
+     <widget class="QLabel" name="eq_spect_label">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>0</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Spectrogram:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="eq_amp_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Amplitude:</string>
+      </property>
+     </widget>
+     <widget class="PlotWidget" name="eq_amplitude">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>411</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="MplWidget" name="eq_spectrogram" native="true">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>20</y>
+        <width>401</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>801</width>
+     <width>867</width>
      <height>22</height>
     </rect>
    </property>
@@ -578,6 +604,19 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+  <customwidget>
+   <class>MplWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">mplwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
