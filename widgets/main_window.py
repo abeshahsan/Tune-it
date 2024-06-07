@@ -65,10 +65,14 @@ class UI_MainWindow(QMainWindow):
         
     
     def closeEvent(self, event):
-        # print("Closing the application.")
-        # self.audio_equalizer.stop_audio()
-        self.stop_audio()
-        event.accept()
+        try:
+            # print("Closing the application.")
+            # self.audio_equalizer.stop_audio()
+            self.stop_audio()
+        except Exception as e:
+            print(e)
+            event.accept()
+            
 
     def choose_file(self):
         """
@@ -144,28 +148,42 @@ class UI_MainWindow(QMainWindow):
             self.play_audio()
             
     def stop_audio(self):
-        self.process.terminate()
-        self.audio_equalizer.is_playing = False
-        self.audio_equalizer.elapsed_time = 0
+        try:
+            self.process.terminate()
+            self.audio_equalizer.is_playing = False
+            self.audio_equalizer.elapsed_time = 0
+        except Exception as e:
+            print(e)
+            
         
     def play_audio(self):
-        self.audio_equalizer.start_time = time.time()
-        self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
-        self.process = Process(target=play, args=(self.audio_equalizer.audio,))
-        self.process.start()
-        self.audio_equalizer.is_playing = True
+        try:
+            self.audio_equalizer.start_time = time.time()
+            self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
+            self.process = Process(target=play, args=(self.audio_equalizer.audio,))
+            self.process.start()
+            self.audio_equalizer.is_playing = True
+        except Exception as e:
+            print(e)
     
     def pause_audio(self):
-        self.audio_equalizer.current_time = time.time()
-        self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
-        self.process.terminate()
-        self.audio_equalizer.is_playing = False
+        try:
+            self.audio_equalizer.current_time = time.time()
+            self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
+            self.process.terminate()
+            self.audio_equalizer.is_playing = False
+        except Exception as e:
+            print(e)
 
     def change_volume(self, volume):
         if self.audio_equalizer.audio is None:
             raise Exception("Could not change volume. Audio file not loaded.")  
-        self.pause_audio()  
-        self.changed_volume = volume - self.volume
-        print(self.volume, volume)
-        self.volume = volume
-        self.play_audio()
+        try:
+            self.pause_audio()  
+            self.changed_volume = volume - self.volume
+            print(self.volume, volume)
+            self.volume = volume
+            self.play_audio()
+        except Exception as e:
+            print(e)
+            
