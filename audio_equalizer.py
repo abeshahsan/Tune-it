@@ -1,3 +1,4 @@
+import cmath
 from pydub import AudioSegment
 import numpy as np
 import time
@@ -7,7 +8,7 @@ from multiprocessing import Process, freeze_support
 from copy import deepcopy
 from pydub.playback import _play_with_simpleaudio, play
 from scipy.signal import butter, lfilter
-from scipy.fft import fft, ifft
+from scipy.fft import fft, ifft, irfft, rfft
 # from numpy import hamming
 
 class AudioEqualizer:
@@ -106,124 +107,65 @@ class AudioEqualizer:
                                          sample_rate, sample_width, channels)
         self.audio +=volume
 
+    def apply_gain(self, factors):
 
-    def butter_bandpass(self, lowcut, highcut, fs, order=5):
-        nyquist = 0.5 * fs
-        low = lowcut / nyquist
-        high = highcut / nyquist
-        b, a = butter(order, [low, high], btype='band')
-        return b, a
+        N = len(self.audio_array)
+        fs = int(self.audio_metadata["sample_rate"])
 
-    # def apply_gain(self, band, gain):
-    #     fs = self.audio.frame_rate
-    #     band_filters = [
-    #         (20, 60), (60, 170), (170, 310), (310, 600), 
-    #         (600, 1000), (1000, 3000), (3000, 6000), (6000, 20000)
-    #     ]
-    #     low, high = band_filters[band]
-    #     b, a = self.butter_bandpass(low, high, fs)
-    #     filtered = lfilter(b, a, self.audio_array)
-    #     filtered = np.nan_to_num(filtered, nan=0.0, posinf=np.iinfo(np.int16).max, neginf=np.iinfo(np.int16).min)
-    #     filtered = np.clip(filtered, np.iinfo(np.int16).min, np.iinfo(np.int16).max)  # Clip values
-    #     filtered = filtered.astype(np.int16)
-    #     self.audio_array = deepcopy(self.full_audio_array)
-    #     self.audio_array += gain * filtered
+        # getting fft of the signal and subtracting amplitudes and phases
+        rfft_coeff = rfft(self.audio_array)
+        signal_rfft_Coeff_abs = np.abs(rfft_coeff)
+        signal_rfft_Coeff_angle = np.angle(rfft_coeff)
 
-    #     sample_width = self.audio.sample_width
-    #     channels = self.audio.channels
-    #     sample_rate = int(self.audio_metadata["sample_rate"])
+        # getting frequencies in range 0 to fmax to access each coeff of rfft coefficients
+        frequencies = np.fft.rfftfreq(N, 1 / fs)
+        # plt.plot(frequencies, signal_rfft_Coeff_abs)
+        # plt.show()
         
-    #     self.audio = self.numpy_to_audio(self.audio_array,
-    #                                      sample_rate, sample_width, channels)
+        # The maximum frequency is half the sample rate
+        points_per_freq = len(frequencies) / (fs / 2)
         
+        for idx in range(len(factors)):
+            low = (fs / 2)/len(factors) * idx
+            # print("low: ",low)
+            high = (((fs / 2)/len(factors)) * (idx + 1)) - 1
+            # print("high: ",high)
 
-    def apply_gain(self, band, gain):
-        fs = self.audio.frame_rate
-        band_filters = [
-            (20, 60), (60, 170), (170, 310), (310, 600), 
-            (600, 1000), (1000, 3000), (3000, 6000), (6000, 20000)
-        ]
-        low, high = band_filters[band]
-        b, a = self.butter_bandpass(low, high, fs)
-        filtered = lfilter(b, a, self.audio_array)
-        filtered[np.isnan(filtered)] = 0
-        
-        # Convert gain from dB to linear scale
-        gain_linear = 10 ** (gain / 20)
-        
-        filtered *= gain_linear
+            # filter that multiply frequency band (from low to high) by factor
+            for f in frequencies:
+                if low < f < high:
+                    f_idx = int(points_per_freq * f)
+                    signal_rfft_Coeff_abs[f_idx] = signal_rfft_Coeff_abs[f_idx] * factors[idx]
+                else:
+                    pass
 
-        if np.isnan(filtered).any():
-            print("Warning: NaN values detected in filtered audio")
-        
-        # Add the filtered signal to the original signal
-        modified_audio_array = self.audio_array + filtered
-        
-        # Handle NaN and infinite values
-        modified_audio_array = np.nan_to_num(modified_audio_array, nan=0.0, posinf=np.iinfo(np.int16).max, neginf=np.iinfo(np.int16).min)
-        
-        # Clip values to avoid overflow and underflow
-        modified_audio_array = np.clip(modified_audio_array, np.iinfo(np.int16).min, np.iinfo(np.int16).max)
-        modified_audio_array = modified_audio_array.astype(np.int16)
-        
+        # plt.plot(frequencies, signal_rfft_Coeff_abs)    
+        # plt.show()
+        # constructing fft coefficients again (from amplitudes and phases) after processing the amplitudes
+        new_rfft_coeff = np.zeros((len(frequencies),), dtype=complex)
+        for f in frequencies:
+            try:
+                f_idx = int(points_per_freq * f)
+                new_rfft_coeff[f_idx]= signal_rfft_Coeff_abs[f_idx]*cmath.exp(1j * signal_rfft_Coeff_angle[f_idx])
+            except:
+                pass
+
+        # constructing the new signal from the fft coeffs by inverse fft
+        modified_array = irfft(new_rfft_coeff).astype(np.int16)
+        modified_array = np.clip(modified_array, -32768, 32767)
         sample_width = self.audio.sample_width
         channels = self.audio.channels
         sample_rate = int(self.audio_metadata["sample_rate"])
+
+        self.audio = self.numpy_to_audio(modified_array, sample_rate, sample_width, channels)
+
+    def set_gain(self, band_sliders):
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
         
-        self.audio_array = deepcopy(modified_audio_array)
-        self.audio = self.numpy_to_audio(self.audio_array, sample_rate, sample_width, channels)
-
-    # def apply_gain(self, band, gain_dB):
-    #     try:
-    #         gain = 10 ** (gain_dB / 20)  # Convert dB to linear scale
-    #         fs = self.audio.frame_rate
-    #         n = len(self.audio_array)
-
-    #         # Define band limits
-    #         band_limits = [
-    #             (20, 60), (60, 170), (170, 310), (310, 600),
-    #             (600, 1000), (1000, 3000), (3000, 6000), (6000, 20000)
-    #         ]
-
-    #         # Get frequency limits for the specified band
-    #         low, high = band_limits[band]
-
-    #         # Calculate corresponding FFT bin indices
-    #         low_bin = int(low * n / fs)
-    #         high_bin = int(high * n / fs)
-
-    #         # Apply FFT overlap-add
-    #         chunk_size = 4096
-    #         hop_size = chunk_size // 2
-    #         fft_vals = np.zeros_like(self.audio_array, dtype=np.complex128)
-    #         for i in range(0, n - chunk_size, hop_size):
-    #             chunk = self.audio_array[i:i + chunk_size]
-    #             chunk_fft = fft(chunk)
-    #             fft_vals[i:i + chunk_size] += chunk_fft
-
-    #         # Apply gain to the specified frequency band
-    #         fft_vals[low_bin:high_bin] *= gain
-
-    #         # Apply inverse FFT
-    #         modified_audio_array = np.real(ifft(fft_vals)).astype(np.int16)
-
-    #         # Clip and normalize audio to avoid clipping
-    #         modified_audio_array = np.clip(modified_audio_array, -32768, 32767)
-
-    #         # Update audio array
-    #         self.audio_array = deepcopy(modified_audio_array)
-
-    #         # Update audio object
-    #         sample_width = self.audio.sample_width
-    #         channels = self.audio.channels
-    #         sample_rate = int(self.audio_metadata["sample_rate"])
-    #         self.audio = self.numpy_to_audio(self.audio_array, sample_rate, sample_width, channels)
-    #     except Exception as e:
-    #         print(f"Error applying gain: {e}")
-
-    def set_gain(self, band, gain):
-        self.gains[band] = gain
-        self.apply_gain(band, gain)
+        print(factors)
+        self.apply_gain(factors)
 
     # def get_audio_segment(self):
     #     return AudioSegment(
@@ -232,7 +174,7 @@ class AudioEqualizer:
     #         sample_width=self.audio.sample_width, 
     #         channels=self.audio.channels
     #     )
-
+        
 
         
 # if __name__ == "__main__":
