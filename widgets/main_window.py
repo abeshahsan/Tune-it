@@ -155,7 +155,7 @@ class UI_MainWindow(QMainWindow):
         if self.audio_equalizer.is_playing:
             self.pause_audio()
         else:
-            self.plot_output(self.eq_y,self.eq_sr)
+            # self.plot_output(self.eq_y,self.eq_sr)
             self.play_audio()
             
     def stop_audio(self):
@@ -184,7 +184,20 @@ class UI_MainWindow(QMainWindow):
         print(self.volume, volume)
         self.volume = volume
         self.play_audio()
+    
+    def set_gain(self, band_sliders):
+        self.pause_audio()
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
+        
+        # print(factors)
+        y, sr = self.audio_equalizer.apply_gain(factors)
+        self.play_audio()
+        
+        self.plot_output(y, sr)
 
+    '''Plotting'''
     def plot_input(self,y,sr):
         try:
             
@@ -254,6 +267,7 @@ class UI_MainWindow(QMainWindow):
 
     def plotOutputSpectrogram(self, eq_y, eq_sr):
         self.eq_spectrogram.canvas.axes.clear()
+
         length=eq_y.shape[0]
         nfft_log=np.floor(np.log2(length))+1
         nfft_val=int(2**nfft_log)
@@ -267,12 +281,4 @@ class UI_MainWindow(QMainWindow):
         plt.tight_layout()
 
         self.eq_spectrogram.canvas.draw()
-    def set_gain(self, band_sliders):
-        self.pause_audio()
-        factors = []
-        for i in range(len(band_sliders)):
-            factors.append(band_sliders[i].value())
-        
-        print(factors)
-        self.audio_equalizer.apply_gain(factors)
-        self.play_audio()
+   

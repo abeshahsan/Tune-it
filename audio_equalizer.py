@@ -159,6 +159,8 @@ class AudioEqualizer:
 
         self.audio = self.numpy_to_audio(modified_array, sample_rate, sample_width, channels)
 
+        return modified_array, fs
+
     def set_gain(self, band_sliders):
         factors = []
         for i in range(len(band_sliders)):
