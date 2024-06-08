@@ -30,6 +30,12 @@ class UI_MainWindow(QMainWindow):
         uic.loadUi(Filepaths.MAIN_WINDOW_V3(), self)
         self.setWindowTitle('Tune-it')
         # self.setFixedSize(1200, 700)
+        self.colorbar=None
+        self.org_sr=None
+        self.eq_sr=None
+        self.org_y=None
+        self.eq_y=None
+
         
         "initializing necessary objects"
         self.audio_file_path = None
@@ -59,6 +65,11 @@ class UI_MainWindow(QMainWindow):
         self.play_pause_btn.clicked.connect(self.play_pause_audio)
         self.stop_btn.clicked.connect(self.stop_audio)
         self.volume_slider.valueChanged.connect(lambda value: self.change_volume(value))
+
+        '''for presets'''
+        self.presets_combo = self.findChild(QComboBox, "presets_combo")
+        # self.presets_combo.addItems(self.audio_equalizer.presets.keys())
+        self.presets_combo.activated.connect(self.apply_preset)
 
         
         self.process = None
@@ -148,9 +159,9 @@ class UI_MainWindow(QMainWindow):
             try:
                 self.audio_equalizer.load(self.audio_file_path)
                 y, sr = librosa.load(self.audio_file_path)
-                self.eq_y=y
-                self.eq_sr=sr
-                self.plot_input(y,sr)
+                self.org_y=y
+                self.org_sr=sr
+                self.plot_input(self.org_y,self.org_sr)
                 self.play_audio()
             except Exception as e:
                 print(e)
@@ -159,7 +170,8 @@ class UI_MainWindow(QMainWindow):
         if self.audio_equalizer.is_playing:
             self.pause_audio()
         else:
-            # self.plot_output(self.eq_y,self.eq_sr)
+            self.eq_y,self.eq_sr=self.audio_equalizer.get_current_eq_audio()
+            self.plot_output(self.eq_y,self.eq_sr)
             self.play_audio()
             
     def stop_audio(self):
@@ -211,7 +223,7 @@ class UI_MainWindow(QMainWindow):
         y, sr = self.audio_equalizer.apply_gain(factors)
         self.play_audio()
         
-        self.plot_output(y, sr)
+        #self.plot_output(y, sr)
 
     '''Plotting'''
     def plot_input(self,y,sr):
@@ -243,7 +255,7 @@ class UI_MainWindow(QMainWindow):
         self.org_amplitude.setLabel(axis='bottom', text='Time (s)',) 
         self.org_amplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
         self.org_amplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.5, 0.1, 0.1)
-        print("y",y)
+        
 
 
 
@@ -292,9 +304,31 @@ class UI_MainWindow(QMainWindow):
 
         self.eq_spectrogram.canvas.axes.set_xlabel('Time [s]')
         self.eq_spectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
-
-        plt.colorbar(im, ax=self.eq_spectrogram.canvas.axes)
+        if self.colorbar is None:
+            self.colorbar = self.eq_spectrogram.canvas.figure.colorbar(im, ax=self.eq_spectrogram.canvas.axes)
         plt.tight_layout()
 
         self.eq_spectrogram.canvas.draw()
-   
+    def set_gain(self, band_sliders):
+        self.pause_audio()
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
+        
+        print(factors)
+        self.audio_equalizer.apply_gain(factors)
+        self.play_audio()
+        
+    def apply_preset(self, index):
+        try:
+            preset_name = self.presets_combo.currentText()
+            # print(preset_name)
+            preset_values = self.audio_equalizer.presets[preset_name]
+            self.apply_gain_sliders(preset_values)  # Update the GUI to reflect the preset gains
+        except ValueError as e:
+            print(e)
+
+    def apply_gain_sliders(self, filters):
+        # Update the GUI to reflect the current gains
+        for i in range(len(self.band_sliders)):
+            self.band_sliders[i].setValue(filters[i])

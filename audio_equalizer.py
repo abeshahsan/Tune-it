@@ -13,7 +13,8 @@ from scipy.fft import fft, ifft, irfft, rfft
 
 class AudioEqualizer:
     def __init__(self):
-        
+        self.eq_y=None
+        self.eq_sr=None
         self.is_playing = False
         self.full_audio_array = None
         self.audio_file_path = None
@@ -25,6 +26,17 @@ class AudioEqualizer:
         self.elapsed_time = 0
         self.playing_audio = None
         self.gains = [0] * 8  # Initialize gains for 8 bands
+        
+        self.presets = {
+            'Rock': [5, 3, 0, -2, -2, 0, 3, 5],
+            'Jazz': [0, 2, 3, 2, 0, -1, -2, 0],
+            'Classical': [0, 0, 2, 3, 2, 0, 0, 0],
+            'Pop': [5, 2, 0, 3, 5, 3, 2, 5],
+            'Bass Boost': [7, 5, 3, 0, -2, -3, -5, -7],
+            'Treble Boost': [-3, -2, 0, 3, 5, 7, 6, 5],
+            'Vocal Boost': [-3, -2, 4, 5, 4, -2, -3, -5],
+            'Dance': [6, 4, 0, 3, 6, 4, 2, 6]
+        }
         
         freeze_support()
     
@@ -199,7 +211,8 @@ class AudioEqualizer:
         sample_width = self.audio.sample_width
         channels = self.audio.channels
         sample_rate = int(self.audio_metadata["sample_rate"])
-
+        self.eq_y=self.audio_array
+        self.eq_sr=sample_rate
         self.audio = self.numpy_to_audio(modified_array, sample_rate, sample_width, channels)
 
         self.audio_array = deepcopy(modified_array)
@@ -258,6 +271,17 @@ class AudioEqualizer:
         
         print(factors)
         self.apply_gain(factors)
+        
+    def preset(self, preset_name):
+        if preset_name not in self.presets:
+            raise ValueError(f"Preset {preset_name} not found.")
+        gains = self.presets[preset_name]
+        for band, gain in enumerate(gains):
+            self.set_gain(band, gain)
+
+            
+    def get_current_eq_audio(self):
+        return self.eq_y, self.eq_sr
 
     # def get_audio_segment(self):
     #     return AudioSegment(
