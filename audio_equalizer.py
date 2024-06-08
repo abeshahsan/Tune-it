@@ -13,7 +13,8 @@ from scipy.fft import fft, ifft, irfft, rfft
 
 class AudioEqualizer:
     def __init__(self):
-        
+        self.eq_y=None
+        self.eq_sr=None
         self.is_playing = False
         self.full_audio_array = None
         self.audio_file_path = None
@@ -167,7 +168,8 @@ class AudioEqualizer:
         sample_width = self.audio.sample_width
         channels = self.audio.channels
         sample_rate = int(self.audio_metadata["sample_rate"])
-
+        self.eq_y=self.audio_array
+        self.eq_sr=sample_rate
         self.audio = self.numpy_to_audio(modified_array, sample_rate, sample_width, channels)
 
         return modified_array, fs
@@ -186,6 +188,10 @@ class AudioEqualizer:
         gains = self.presets[preset_name]
         for band, gain in enumerate(gains):
             self.set_gain(band, gain)
+
+            
+    def get_current_eq_audio(self):
+        return self.eq_y, self.eq_sr
 
     # def get_audio_segment(self):
     #     return AudioSegment(

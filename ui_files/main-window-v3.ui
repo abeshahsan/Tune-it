@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>801</width>
-    <height>786</height>
+    <width>922</width>
+    <height>667</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>771</width>
+      <width>901</width>
       <height>291</height>
      </rect>
     </property>
@@ -46,7 +46,7 @@
      <widget class="QLabel" name="org_spect_label">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>420</x>
         <y>0</y>
         <width>71</width>
         <height>16</height>
@@ -56,22 +56,22 @@
        <string>Spectrogram:</string>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="org_amplitude">
+     <widget class="PlotWidget" name="org_amplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>371</width>
+        <width>401</width>
         <height>231</height>
        </rect>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="org_spectrogram">
+     <widget class="MplWidget" name="org_spectrogram" native="true">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>420</x>
         <y>20</y>
-        <width>371</width>
+        <width>471</width>
         <height>231</height>
        </rect>
       </property>
@@ -84,7 +84,7 @@
      <widget class="QLabel" name="eq_spect_label">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>420</x>
         <y>0</y>
         <width>71</width>
         <height>16</height>
@@ -107,22 +107,22 @@
        <string>Amplitude:</string>
       </property>
      </widget>
-     <widget class="QGraphicsView" name="eq_spectrogram">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>20</y>
-        <width>371</width>
-        <height>231</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QGraphicsView" name="eq_amplitude">
+     <widget class="PlotWidget" name="eq_amplitude">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>371</width>
+        <width>401</width>
+        <height>231</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="MplWidget" name="eq_spectrogram" native="true">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>20</y>
+        <width>471</width>
         <height>231</height>
        </rect>
       </property>
@@ -132,8 +132,8 @@
    <widget class="QSlider" name="volume_slider">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>370</y>
+      <x>170</x>
+      <y>350</y>
       <width>160</width>
       <height>16</height>
      </rect>
@@ -154,8 +154,8 @@
    <widget class="QLabel" name="elapse_time">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>360</y>
+      <x>140</x>
+      <y>340</y>
       <width>21</width>
       <height>31</height>
      </rect>
@@ -173,7 +173,7 @@
    <widget class="QWidget" name="band_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>80</x>
       <y>460</y>
       <width>751</width>
       <height>161</height>
@@ -403,47 +403,11 @@
      </item>
     </layout>
    </widget>
-   <widget class="QProgressBar" name="progress_bar">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>320</y>
-      <width>761</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="value">
-     <number>24</number>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="backward">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>360</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>assets/audio backward.svg</normaloff>assets/audio backward.svg</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>25</width>
-      <height>25</height>
-     </size>
-    </property>
-   </widget>
    <widget class="QPushButton" name="play_pause_btn">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>360</y>
+      <x>410</x>
+      <y>340</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -462,34 +426,11 @@
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="forward">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>360</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>assets/audio fastforward.svg</normaloff>assets/audio fastforward.svg</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>25</width>
-      <height>25</height>
-     </size>
-    </property>
-   </widget>
    <widget class="QPushButton" name="stop_btn">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>360</y>
+      <x>450</x>
+      <y>340</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -511,9 +452,9 @@
    <widget class="QComboBox" name="presets_combo">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>360</y>
-      <width>201</width>
+      <x>530</x>
+      <y>340</y>
+      <width>191</width>
       <height>26</height>
      </rect>
     </property>
@@ -573,8 +514,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>801</width>
-     <height>26</height>
+     <width>922</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -613,6 +554,19 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+  <customwidget>
+   <class>MplWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">mplwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
