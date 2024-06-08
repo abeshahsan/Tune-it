@@ -73,6 +73,16 @@ class UI_MainWindow(QMainWindow):
             slider.valueChanged.connect(lambda : self.set_gain(self.band_sliders))
 
         
+        self.colorbar = None
+
+        self.presets_combo = self.findChild(QComboBox, "presets_combo")
+        self.presets_combo.activated.connect(self.apply_preset)
+
+
+        self.file_name = self.findChild(QLabel, "file_name")
+        self.file_path = self.findChild(QLabel, "file_path")
+
+        
     
     def closeEvent(self, event):
         try:
@@ -109,6 +119,11 @@ class UI_MainWindow(QMainWindow):
         
         if audio_file_path:
             self.audio_file_path = audio_file_path
+
+            filename = os.path.basename(self.audio_file_path)
+            self.file_name.setText(filename)
+            self.file_path.setText(self.audio_file_path)
+
             self.audio_file_selected.value = True
             self.enable_all()
         
@@ -146,6 +161,7 @@ class UI_MainWindow(QMainWindow):
         if self.audio_file_selected.value:
             self.audio_file_selected.value = False
             try:
+                self.reset_sliders()
                 self.audio_equalizer.load(self.audio_file_path)
                 y, sr = librosa.load(self.audio_file_path)
                 self.eq_y=y
@@ -293,8 +309,27 @@ class UI_MainWindow(QMainWindow):
         self.eq_spectrogram.canvas.axes.set_xlabel('Time [s]')
         self.eq_spectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
 
-        plt.colorbar(im, ax=self.eq_spectrogram.canvas.axes)
+        if self.colorbar is None:
+            self.colorbar = self.eq_spectrogram.canvas.figure.colorbar(im, ax=self.eq_spectrogram.canvas.axes)
         plt.tight_layout()
 
         self.eq_spectrogram.canvas.draw()
+
+    def apply_preset(self, index):
+        try:
+            preset_name = self.presets_combo.currentText()
+            # print(preset_name)
+            preset_values = self.audio_equalizer.presets[preset_name]
+            self.apply_gain_sliders(preset_values)  # Update the GUI to reflect the preset gains
+        except ValueError as e:
+            print(e)
+
+    def apply_gain_sliders(self, filters):
+        # Update the GUI to reflect the current gains
+        for i in range(len(self.band_sliders)):
+            self.band_sliders[i].setValue(filters[i])
+    
+    def reset_sliders(self):
+        for i in range(len(self.band_sliders)):
+            self.band_sliders[i].setValue(2)
    

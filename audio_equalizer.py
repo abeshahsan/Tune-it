@@ -25,9 +25,26 @@ class AudioEqualizer:
         self.elapsed_time = 0
         self.playing_audio = None
         self.gains = [0] * 8  # Initialize gains for 8 bands
+
+        self.presets = {
+            'Rock': [5, 3, 0, -2, -2, 0, 3, 5],
+            'Jazz': [0, 2, 3, 2, 0, -1, -2, 0],
+            # 'Classical': [0, 0, 2, 3, 2, 0, 0, 0],
+            'Pop': [5, 2, 0, 3, 5, 3, 2, 5],
+            'Bass Boost': [7, 5, 3, 0, -2, -3, -5, -7],
+            'Treble Boost': [-3, -2, 0, 3, 5, 7, 6, 5],
+            'Vocal Boost': [-3, -2, 4, 5, 4, -2, -3, -5],
+            'Dance': [6, 4, 0, 3, 6, 4, 2, 6]
+        }
         
         freeze_support()
     
+    def preset(self, preset_name):
+        if preset_name not in self.presets:
+            raise ValueError(f"Preset {preset_name} not found.")
+        gains = self.presets[preset_name]
+        for band, gain in enumerate(gains):
+            self.set_gain(band, gain)
     
     def load(self, audio_file_path):
         if not audio_file_path:
@@ -63,25 +80,6 @@ class AudioEqualizer:
             file_name = f"tune-it--{self.audio_file_path}"
         self.audio.export(file_name, format="mp3")
     
-    # def play_audio(self):
-    #     if self.audio is None:
-    #         raise Exception("Could not play audio. self.audio is None.")
-        
-    #     self.seek(self.elapsed_time) #to resume from where it was paused
-    #     self.playing_audio = _play_with_simpleaudio(self.audio)
-    #     self.start_time = time.time()
-        
-    # def stop_audio(self):
-    #     self.playing_audio.stop()
-    
-    # def pause_audio(self):
-    #     try:
-    #         self.playing_audio.stop()
-    #         self.current_time = time.time()
-    #         self.elapsed_time += (self.current_time - self.start_time)
-    #         # print(f"Audio paused at {self.elapsed_time} seconds.")
-    #     except Exception as e:
-    #         print(e)
             
     def change_volume(self, gain=-2):
         if self.audio is None:
@@ -146,12 +144,12 @@ class AudioEqualizer:
         
     def apply_gain(self, factors):
 
-        N = len(self.audio_array)
+        N = len(self.full_audio_array)
         fs = int(self.audio_metadata["sample_rate"])
         original_max_amplitude = np.max(np.abs(self.audio_array))
 
         # getting fft of the signal and subtracting amplitudes and phases
-        rfft_coeff = rfft(self.audio_array)
+        rfft_coeff = rfft(self.full_audio_array)
         signal_rfft_Coeff_abs = np.abs(rfft_coeff)
         signal_rfft_Coeff_angle = np.angle(rfft_coeff)
 
@@ -191,9 +189,9 @@ class AudioEqualizer:
         # constructing the new signal from the fft coeffs by inverse fft
         modified_array = irfft(new_rfft_coeff).astype(np.int16)
         modified_max_amplitude = np.max(np.abs(modified_array))
-        if modified_max_amplitude > 0:
-            normalization_factor = original_max_amplitude / modified_max_amplitude
-            modified_array = (modified_array * normalization_factor).astype(np.int16)
+        # if modified_max_amplitude > 0:
+        #     normalization_factor = original_max_amplitude / modified_max_amplitude
+        #     modified_array = (modified_array * normalization_factor).astype(np.int16)
 
         modified_array = np.clip(modified_array, -32768, 32767)
         sample_width = self.audio.sample_width
@@ -266,7 +264,7 @@ class AudioEqualizer:
     #         sample_width=self.audio.sample_width, 
     #         channels=self.audio.channels
     #     )
-        
+    
 
         
 # if __name__ == "__main__":
