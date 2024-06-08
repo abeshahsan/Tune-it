@@ -173,31 +173,33 @@ class UI_MainWindow(QMainWindow):
         
     def play_audio(self):
         try:
-            self.audio_equalizer.start_time = time.time()
-            # self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
+            self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
             self.process = Process(target=play, args=(self.audio_equalizer.audio,))
             self.process.start()
+            self.audio_equalizer.start_time = time.time()
             self.audio_equalizer.is_playing = True
         except Exception as e:
             print(e)
     
     def pause_audio(self):
         try:
+            self.process.terminate()
             self.audio_equalizer.current_time = time.time()
             self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
-            self.process.terminate()
+            print(self.audio_equalizer.elapsed_time)
             self.audio_equalizer.is_playing = False
         except Exception as e:
             print(e)
 
-    def change_volume(self, volume):
-        if self.audio_equalizer.audio is None:
-            raise Exception("Could not change volume. Audio file not loaded.")  
-        self.pause_audio()  
-        self.changed_volume = volume - self.volume
-        print(self.volume, volume)
-        self.volume = volume
-        self.play_audio()
+    # def change_volume(self, volume):
+    #     if self.audio_equalizer.audio is None:
+    #         raise Exception("Could not change volume. Audio file not loaded.")  
+    #     self.pause_audio()  
+    #     self.changed_volume = volume - self.volume
+    #     self.audio_equalizer.audio = np.clip(self.audio_equalizer.audio + self.changed_volume, 0, 2147483647)
+    #     print(self.volume, volume)
+    #     self.volume = volume
+    #     self.play_audio()
     
     def set_gain(self, band_sliders):
         self.pause_audio()

@@ -4,7 +4,7 @@ import numpy as np
 import time
 from pydub import playback
 from pydub.utils import mediainfo
-from multiprocessing import Pool, Process, freeze_support
+from multiprocessing import Process, freeze_support
 from copy import deepcopy
 from pydub.playback import _play_with_simpleaudio, play
 from scipy.signal import butter, lfilter
@@ -88,67 +88,49 @@ class AudioEqualizer:
             raise Exception("Could not change volume. Audio file not loaded.")    
         self.audio += gain
     
-    # def seek(self, time, volume=0):
-    #     if self.audio is None:
-    #         raise Exception("Could not seek audio. Audio file not loaded.")
-        
-    #     sample_width = self.audio.sample_width
-    #     channels = self.audio.channels
-    #     sample_rate = int(self.audio_metadata["sample_rate"])
-        
-    #     print(f"Sample width: {sample_width}, Channels: {channels}, Sample rate: {sample_rate}")
-
-    #     # Calculate the exact position in samples
-    #     from_sample = int(round(time * sample_rate * channels))
-    #     print(f"Calculated from_sample before alignment: {from_sample}")
-
-    #     # Make sure from_sample is a multiple of (sample_rate * channels)
-    #     remainder = from_sample % (sample_rate * channels)
-    #     print(f"Remainder: {remainder}")
-    #     from_sample -= remainder
-    #     print(f"Aligned from_sample: {from_sample}")
-        
-    #     # Check if from_sample is within the valid range
-    #     total_samples = len(self.audio_array)
-    #     print(f"Total samples in audio: {total_samples}")
-
-    #     if from_sample >= total_samples:
-    #         raise ValueError("Seek time is beyond the length of the audio.")
-
-    #     # Debugging the slicing process
-    #     print(f"Length of audio array before slicing: {len(self.audio_array)}")
-    #     sliced_audio_array = self.audio_array[from_sample:]
-    #     print(f"Length of audio array after slicing: {len(sliced_audio_array)}")
-
-    #     # Update the audio array and other attributes
-    #     self.audio = self.numpy_to_audio(sliced_audio_array, sample_rate, sample_width, channels)
-    #     print("Audio has been successfully seeked and updated.")
-
-    def seek(self, time, volume = 0):
+    def seek(self, time, volume=0):
         if self.audio is None:
             raise Exception("Could not seek audio. Audio file not loaded.")
         
-        total_samples = len(self.audio_array)
         sample_width = self.audio.sample_width
         channels = self.audio.channels
         sample_rate = int(self.audio_metadata["sample_rate"])
+        
+        print(f"Sample width: {sample_width}, Channels: {channels}, Sample rate: {sample_rate}")
 
         # Calculate the exact position in samples
-        from_sample = int(time * sample_rate * sample_width)
+        from_sample = int(round(time * sample_rate * channels))
+        print(f"Calculated from_sample before alignment: {from_sample}")
 
-        # Make sure from_sample is a multiple of (sample_width * channels)
-        remainder = (total_samples - from_sample) % (sample_width * channels)
+        # Make sure from_sample is a multiple of (sample_rate * channels)
+        remainder = from_sample % (sample_rate * channels)
+        print(f"Remainder: {remainder}")
+        from_sample -= remainder
+        print(f"Aligned from_sample: {from_sample}")
         
-        self.audio = self.numpy_to_audio(np.pad(self.audio_array[from_sample:], (0, remainder), mode='constant'),
-                                         sample_rate, sample_width, channels)
-        # self.audio +=volume
+        # Check if from_sample is within the valid range
+        total_samples = len(self.audio_array)
+        print(f"Total samples in audio: {total_samples}")
 
+        if from_sample >= total_samples:
+            raise ValueError("Seek time is beyond the length of the audio.")
+
+        # Debugging the slicing process
+        print(f"Length of audio array before slicing: {len(self.audio_array)}")
+        sliced_audio_array = self.audio_array[from_sample:]
+        print(f"Length of audio array after slicing: {len(sliced_audio_array)}")
+
+        # Update the audio array and other attributes
+        self.audio = self.numpy_to_audio(sliced_audio_array, sample_rate, sample_width, channels)
+        print("Audio has been successfully seeked and updated.")
+
+
+            
         
     def apply_gain(self, factors):
 
         N = len(self.audio_array)
         fs = int(self.audio_metadata["sample_rate"])
-        original_max_amplitude = np.max(np.abs(self.audio_array))
 
         # getting fft of the signal and subtracting amplitudes and phases
         rfft_coeff = rfft(self.audio_array)
@@ -190,11 +172,6 @@ class AudioEqualizer:
 
         # constructing the new signal from the fft coeffs by inverse fft
         modified_array = irfft(new_rfft_coeff).astype(np.int16)
-        modified_max_amplitude = np.max(np.abs(modified_array))
-        if modified_max_amplitude > 0:
-            normalization_factor = original_max_amplitude / modified_max_amplitude
-            modified_array = (modified_array * normalization_factor).astype(np.int16)
-
         modified_array = np.clip(modified_array, -32768, 32767)
         sample_width = self.audio.sample_width
         channels = self.audio.channels
@@ -205,51 +182,6 @@ class AudioEqualizer:
         self.audio_array = deepcopy(modified_array)
 
         return modified_array, fs
-
-
-    # def apply_gain(self, factors):
-    #     N = len(self.audio_array)
-    #     fs = int(self.audio_metadata["sample_rate"])
-
-    #     # Getting FFT of the signal and extracting amplitudes and phases
-    #     rfft_coeff = rfft(self.audio_array)
-    #     signal_rfft_Coeff_abs = np.abs(rfft_coeff)
-    #     signal_rfft_Coeff_angle = np.angle(rfft_coeff)
-
-    #     # Getting frequencies in range 0 to fmax to access each coeff of rfft coefficients
-    #     frequencies = np.fft.rfftfreq(N, 1 / fs)
-
-    #     # The maximum frequency is half the sample rate
-    #     points_per_freq = len(frequencies) / (fs / 2)
-
-    #     # Define the frequency bands
-    #     low_freqs = (fs / 2) / len(factors) * np.arange(len(factors))
-    #     high_freqs = ((fs / 2) / len(factors)) * (np.arange(1, len(factors) + 1)) - 1
-
-    #     # Create a mask for each factor
-    #     masks = [(frequencies > low) & (frequencies < high) for low, high in zip(low_freqs, high_freqs)]
-
-    #     # Apply the gain factors to the signal
-    #     for idx, mask in enumerate(masks):
-    #         signal_rfft_Coeff_abs[mask] *= factors[idx]
-
-    #     # Constructing FFT coefficients again (from amplitudes and phases) after processing the amplitudes
-    #     new_rfft_coeff = signal_rfft_Coeff_abs * np.exp(1j * signal_rfft_Coeff_angle)
-
-    #     # Constructing the new signal from the FFT coeffs by inverse FFT
-    #     modified_array = irfft(new_rfft_coeff).astype(np.int16)
-    #     modified_array = np.clip(modified_array, -32768, 32767)
-    #     sample_width = self.audio.sample_width
-    #     channels = self.audio.channels
-    #     sample_rate = int(self.audio_metadata["sample_rate"])
-
-    #     self.audio = self.numpy_to_audio(modified_array, sample_rate, sample_width, channels)
-
-    #     self.audio_array = deepcopy(modified_array)
-
-    #     return modified_array, fs
-
-
 
     def set_gain(self, band_sliders):
         factors = []
