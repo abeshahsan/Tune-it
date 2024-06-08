@@ -511,7 +511,7 @@
    <widget class="QComboBox" name="presets_combo">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>470</x>
       <y>360</y>
       <width>201</width>
       <height>26</height>
@@ -567,6 +567,19 @@
      </property>
     </item>
    </widget>
+   <widget class="QCheckBox" name="reverbCheckbox">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>360</y>
+      <width>93</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reverb</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -574,7 +587,7 @@
      <x>0</x>
      <y>0</y>
      <width>801</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

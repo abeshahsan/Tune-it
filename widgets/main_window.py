@@ -78,7 +78,9 @@ class UI_MainWindow(QMainWindow):
             slider.valueChanged.connect(lambda : self.set_gain(self.band_sliders))
 
         
-    
+        ''' Reverb button '''
+        self.reverbCheckbox.stateChanged.connect(self.toggle_reverb)
+
     def closeEvent(self, event):
         try:
             # print("Closing the application.")
@@ -320,7 +322,12 @@ class UI_MainWindow(QMainWindow):
             print(e)
 
     def apply_gain_sliders(self, filters):
-        # Update the GUI to reflect the current gains
         for i in range(len(self.band_sliders)):
             self.band_sliders[i].setValue(filters[i])
         self.play_audio()
+
+    def toggle_reverb(self, state):
+        if state == Qt.CheckState.Checked.value: 
+            self.audio_equalizer.apply_reverb()
+        else:
+            self.audio_equalizer.remove_reverb()

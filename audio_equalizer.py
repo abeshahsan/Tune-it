@@ -7,7 +7,7 @@ from pydub.utils import mediainfo
 from multiprocessing import Process, freeze_support
 from copy import deepcopy
 from pydub.playback import _play_with_simpleaudio, play
-from scipy.signal import butter, lfilter
+from scipy.signal import butter, lfilter, convolve
 from scipy.fft import fft, ifft, irfft, rfft
 # from numpy import hamming
 
@@ -38,8 +38,10 @@ class AudioEqualizer:
         }
         
         freeze_support()
-    
-    
+        
+        # Initialize reverb parameters
+        self.reverb_active = False
+        
     def load(self, audio_file_path):
         if not audio_file_path:
             raise Exception("Audio file path is empty.")
@@ -202,12 +204,29 @@ class AudioEqualizer:
     #         channels=self.audio.channels
     #     )
         
+    def create_reverb_impulse(self, duration=2.5, decay=2.5):
+        impulse = np.zeros(int(self.sample_rate * duration))
+        impulse[0] = 1.0
+        for i in range(1, len(impulse)):
+            impulse[i] = impulse[i - 1] * decay
+        return impulse
 
-        
+    def apply_reverb(self):
+        if self.audio is not None:
+            samples = np.array(self.audio.get_array_of_samples())
+            reverb_kernel = self.create_reverb_impulse(duration=0.5, decay=0.5)
+            samples = convolve(samples, reverb_kernel, mode='full')[:len(samples)]
+            self.audio = self.numpy_to_audio(samples, self.sample_rate, self.audio.sample_width, self.audio.channels)
+            self.reverb_active = True
+
+    def remove_reverb(self):
+        self.load(self.audio_file_path)  # Reload the original audio file to remove the reverb
+        self.reverb_active = False
+
+
 if __name__ == "__main__":
     a = AudioEqualizer()
     a.load("input_audio.mp3")
-    a.preset("Rock")
     p = Process(target=play, args=(a.audio,))
     p.start()
     time.sleep(5)
