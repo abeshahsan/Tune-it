@@ -60,6 +60,11 @@ class UI_MainWindow(QMainWindow):
         self.stop_btn.clicked.connect(self.stop_audio)
         self.volume_slider.valueChanged.connect(lambda value: self.change_volume(value))
 
+        '''for presets'''
+        self.presets_combo = self.findChild(QComboBox, "presets_combo")
+        # self.presets_combo.addItems(self.audio_equalizer.presets.keys())
+        self.presets_combo.activated.connect(self.apply_preset)
+
         
         self.process = None
 
@@ -293,3 +298,17 @@ class UI_MainWindow(QMainWindow):
         print(factors)
         self.audio_equalizer.apply_gain(factors)
         self.play_audio()
+        
+    def apply_preset(self, index):
+        try:
+            preset_name = self.presets_combo.currentText()
+            # print(preset_name)
+            preset_values = self.audio_equalizer.presets[preset_name]
+            self.apply_gain_sliders(preset_values)  # Update the GUI to reflect the preset gains
+        except ValueError as e:
+            print(e)
+
+    def apply_gain_sliders(self, filters):
+        # Update the GUI to reflect the current gains
+        for i in range(len(self.band_sliders)):
+            self.band_sliders[i].setValue(filters[i])

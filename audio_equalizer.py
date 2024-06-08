@@ -26,6 +26,17 @@ class AudioEqualizer:
         self.playing_audio = None
         self.gains = [0] * 8  # Initialize gains for 8 bands
         
+        self.presets = {
+            'Rock': [5, 3, 0, -2, -2, 0, 3, 5],
+            'Jazz': [0, 2, 3, 2, 0, -1, -2, 0],
+            'Classical': [0, 0, 2, 3, 2, 0, 0, 0],
+            'Pop': [5, 2, 0, 3, 5, 3, 2, 5],
+            'Bass Boost': [7, 5, 3, 0, -2, -3, -5, -7],
+            'Treble Boost': [-3, -2, 0, 3, 5, 7, 6, 5],
+            'Vocal Boost': [-3, -2, 4, 5, 4, -2, -3, -5],
+            'Dance': [6, 4, 0, 3, 6, 4, 2, 6]
+        }
+        
         freeze_support()
     
     
@@ -166,6 +177,13 @@ class AudioEqualizer:
         
         print(factors)
         self.apply_gain(factors)
+        
+    def preset(self, preset_name):
+        if preset_name not in self.presets:
+            raise ValueError(f"Preset {preset_name} not found.")
+        gains = self.presets[preset_name]
+        for band, gain in enumerate(gains):
+            self.set_gain(band, gain)
 
     # def get_audio_segment(self):
     #     return AudioSegment(
