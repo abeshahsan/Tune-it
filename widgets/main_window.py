@@ -199,6 +199,8 @@ class UI_MainWindow(QMainWindow):
             print(self.volume, volume)
             self.volume = volume
             self.play_audio()
+        except Exception as e:
+            print(e)
 
     def plot_input(self,y,sr):
         try:
@@ -290,6 +292,4 @@ class UI_MainWindow(QMainWindow):
         
         print(factors)
         self.audio_equalizer.apply_gain(factors)
-        self.play_audio()        except Exception as e:
-            print(e)
-            
+        self.play_audio()
