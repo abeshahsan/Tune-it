@@ -9,14 +9,23 @@ from audio_equalizer import AudioEqualizer
 from filepaths import Filepaths
 from utilites import *
 import os
-
+import pyqtgraph as pg
+import numpy as np
+import librosa
+from scipy import signal
+from scipy.fft import fftshift
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 from multiprocessing import Process
-
+from utilites import *
+from mplwidget import MplWidget
 from pydub import playback
 from pydub.playback import play
     
 class UI_MainWindow(QMainWindow):
     def __init__(self):
+
+        
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW_V3(), self)
         self.setWindowTitle('Tune-it')
@@ -46,14 +55,15 @@ class UI_MainWindow(QMainWindow):
         self.action_save_as.triggered.connect(self.save_new_file)
         
         self.audio_file_selected.valueChanged.connect(self.load_audio)
+        
         self.play_pause_btn.clicked.connect(self.play_pause_audio)
         self.stop_btn.clicked.connect(self.stop_audio)
         self.volume_slider.valueChanged.connect(lambda value: self.change_volume(value))
 
         '''for presets'''
-        # self.presets_combo = self.findChild(QComboBox, "presets_combo")
+        self.presets_combo = self.findChild(QComboBox, "presets_combo")
         # self.presets_combo.addItems(self.audio_equalizer.presets.keys())
-        # self.presets_combo.activated[str].connect(self.apply_preset)
+        self.presets_combo.activated.connect(self.apply_preset)
 
         
         self.process = None
@@ -62,18 +72,22 @@ class UI_MainWindow(QMainWindow):
         self.band_sliders = [
             self.findChild(QSlider, f"band_slider_{i}") for i in range(1, 9)
         ]
-        # print(self.band_sliders)
+        
 
         for i, slider in enumerate(self.band_sliders):
-            slider.valueChanged.connect(lambda value, band=i: self.audio_equalizer.set_gain(band, value))
+            slider.valueChanged.connect(lambda : self.set_gain(self.band_sliders))
 
         
     
     def closeEvent(self, event):
-        # print("Closing the application.")
-        # self.audio_equalizer.stop_audio()
-        self.stop_audio()
-        event.accept()
+        try:
+            # print("Closing the application.")
+            # self.audio_equalizer.stop_audio()
+            self.stop_audio()
+        except Exception as e:
+            print(e)
+            event.accept()
+            
 
     def choose_file(self):
         """
@@ -138,6 +152,10 @@ class UI_MainWindow(QMainWindow):
             self.audio_file_selected.value = False
             try:
                 self.audio_equalizer.load(self.audio_file_path)
+                y, sr = librosa.load(self.audio_file_path)
+                self.eq_y=y
+                self.eq_sr=sr
+                self.plot_input(y,sr)
                 self.play_audio()
             except Exception as e:
                 print(e)
@@ -146,25 +164,36 @@ class UI_MainWindow(QMainWindow):
         if self.audio_equalizer.is_playing:
             self.pause_audio()
         else:
+            # self.plot_output(self.eq_y,self.eq_sr)
             self.play_audio()
             
     def stop_audio(self):
-        self.process.terminate()
-        self.audio_equalizer.is_playing = False
-        self.audio_equalizer.elapsed_time = 0
+        try:
+            self.process.terminate()
+            self.audio_equalizer.is_playing = False
+            self.audio_equalizer.elapsed_time = 0
+        except Exception as e:
+            print(e)
+            
         
     def play_audio(self):
-        self.audio_equalizer.start_time = time.time()
-        self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
-        self.process = Process(target=play, args=(self.audio_equalizer.audio,))
-        self.process.start()
-        self.audio_equalizer.is_playing = True
+        try:
+            self.audio_equalizer.start_time = time.time()
+            # self.audio_equalizer.seek(self.audio_equalizer.elapsed_time, self.changed_volume)
+            self.process = Process(target=play, args=(self.audio_equalizer.audio,))
+            self.process.start()
+            self.audio_equalizer.is_playing = True
+        except Exception as e:
+            print(e)
     
     def pause_audio(self):
-        self.audio_equalizer.current_time = time.time()
-        self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
-        self.process.terminate()
-        self.audio_equalizer.is_playing = False
+        try:
+            self.audio_equalizer.current_time = time.time()
+            self.audio_equalizer.elapsed_time += (self.audio_equalizer.current_time - self.audio_equalizer.start_time)
+            self.process.terminate()
+            self.audio_equalizer.is_playing = False
+        except Exception as e:
+            print(e)
 
     def change_volume(self, volume):
         if self.audio_equalizer.audio is None:
@@ -174,16 +203,124 @@ class UI_MainWindow(QMainWindow):
         print(self.volume, volume)
         self.volume = volume
         self.play_audio()
+    
+    def set_gain(self, band_sliders):
+        self.pause_audio()
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
+        
+        # print(factors)
+        y, sr = self.audio_equalizer.apply_gain(factors)
+        self.play_audio()
+        
+        self.plot_output(y, sr)
 
-        ''' for presets '''
-    def apply_preset(self, preset_name):
+    '''Plotting'''
+    def plot_input(self,y,sr):
         try:
-            self.audio_equalizer.preset(preset_name)
-            self.apply_gain_sliders()  # Update the GUI to reflect the preset gains
+            
+            self.plotInputAmplitude(y, sr)
+            self.plotInputSpectrogram(y, sr)
+            
+        except Exception as e:
+            print(e)
+    def plot_output(self,y,sr):
+        try:
+            self.plotOutputAmplitude(y, sr)
+            self.plotOutputSpectrogram(y, sr)
+        except Exception as e:
+            print(e)
+    
+    def plotInputAmplitude(self, y, sr):
+        self.org_amplitude.clear()
+        
+        peak_value = np.max(np.abs(y))
+        normalized_data = y / peak_value
+        sampling_rate = sr
+        length = normalized_data.shape[0]
+        time = np.linspace(0, length, num=length)
+        self.org_amplitude.plot(time, y, pen='b')
+
+        self.org_amplitude.setLabel(axis='left', text='Amplitude',)
+        self.org_amplitude.setLabel(axis='bottom', text='Time (s)',) 
+        self.org_amplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
+        self.org_amplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.5, 0.1, 0.1)
+        print("y",y)
+
+
+
+    def plotOutputAmplitude(self, eq_y, eq_sr):
+        self.eq_amplitude.clear()
+
+        peak_value = np.max(np.abs(eq_y))
+        normalized_data = eq_y / peak_value
+        sampling_rate = eq_sr
+        length = normalized_data.shape[0]
+        time = np.linspace(0, length, num=length)
+        self.eq_amplitude.plot(time, eq_y, pen='b')
+
+        self.eq_amplitude.setLabel(axis='left', text='Amplitude')
+        self.eq_amplitude.setLabel(axis='bottom', text='Time (s)') 
+        self.eq_amplitude.getPlotItem().getViewBox().setYRange(1.0, -1.0)
+        self.eq_amplitude.getPlotItem().getViewBox().setContentsMargins(0.1, 0.1, 0.1, 0.1)
+        print("eq_y",eq_y)
+
+    def plotInputSpectrogram(self, y, sr):
+        self.org_spectrogram.canvas.axes.clear()
+        peak_value = np.max(np.abs(y))
+        normalized_data = y / peak_value
+        length = normalized_data.shape[0]
+        nfft_log=np.floor(np.log2(length))+1
+        nfft_val=int(2**nfft_log)
+        # Computes FFT and plots the spectrogram
+        Pxx, freqs, bins, im = self.org_spectrogram.canvas.axes.specgram(y, Fs=sr)
+
+        self.org_spectrogram.canvas.axes.set_xlabel('Time [s]')
+        self.org_spectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
+
+        plt.colorbar(im, ax=self.org_spectrogram.canvas.axes)
+        plt.tight_layout()
+
+        self.org_spectrogram.canvas.draw()
+
+    def plotOutputSpectrogram(self, eq_y, eq_sr):
+        self.eq_spectrogram.canvas.axes.clear()
+
+        length=eq_y.shape[0]
+        nfft_log=np.floor(np.log2(length))+1
+        nfft_val=int(2**nfft_log)
+        # Computes FFT and plots the spectrogram
+        Pxx, freqs, bins, im = self.eq_spectrogram.canvas.axes.specgram(eq_y, Fs=eq_sr)
+
+        self.eq_spectrogram.canvas.axes.set_xlabel('Time [s]')
+        self.eq_spectrogram.canvas.axes.set_ylabel('Frequency [Hz]')
+
+        plt.colorbar(im, ax=self.eq_spectrogram.canvas.axes)
+        plt.tight_layout()
+
+        self.eq_spectrogram.canvas.draw()
+    def set_gain(self, band_sliders):
+        self.pause_audio()
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
+        
+        print(factors)
+        self.audio_equalizer.apply_gain(factors)
+        self.play_audio()
+        
+    def apply_preset(self, index):
+        try:
+            preset_name = self.presets_combo.currentText()
+            # print(preset_name)
+            preset_values = self.audio_equalizer.presets[preset_name]
+            self.apply_gain_sliders(preset_values)  # Update the GUI to reflect the preset gains
         except ValueError as e:
             print(e)
 
-    def apply_gain_sliders(self):
+    def apply_gain_sliders(self, filters):
         # Update the GUI to reflect the current gains
-        for band, gain in enumerate(self.audio_equalizer.gains):
-            self.band_sliders[band].setValue(gain)
+        for i in range(len(self.band_sliders)):
+            self.band_sliders[i].setValue(filters[i])
+        self.play_audio()

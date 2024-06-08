@@ -21,11 +21,11 @@ python -m venv .env
 ```
 .\.env\Scripts\activate
 ```
-If you activate the virtual env, all commands, and packages will be controlled from the '.venv' folder.
+If you activate the virtual env, all commands, and packages will be controlled from the '.env' folder.
 \
 The interpreter will be: .env/Scripts/python.exe
 \
-And The libraries will be in .venv/Lib
+And The libraries will be in .env/Lib
 
 ### Download packages
 ```
@@ -35,4 +35,8 @@ pip install -r requirements.txt
 ### Run
 ```
 python -m main
+```
+Or,
+```
+python main.py
 ```

@@ -1,3 +1,4 @@
+import cmath
 from pydub import AudioSegment
 import numpy as np
 import time
@@ -7,6 +8,8 @@ from multiprocessing import Process, freeze_support
 from copy import deepcopy
 from pydub.playback import _play_with_simpleaudio, play
 from scipy.signal import butter, lfilter
+from scipy.fft import fft, ifft, irfft, rfft
+# from numpy import hamming
 
 class AudioEqualizer:
     def __init__(self):
@@ -22,6 +25,7 @@ class AudioEqualizer:
         self.elapsed_time = 0
         self.playing_audio = None
         self.gains = [0] * 8  # Initialize gains for 8 bands
+        
         self.presets = {
             'Rock': [5, 3, 0, -2, -2, 0, 3, 5],
             'Jazz': [0, 2, 3, 2, 0, -1, -2, 0],
@@ -32,6 +36,7 @@ class AudioEqualizer:
             'Vocal Boost': [-3, -2, 4, 5, 4, -2, -3, -5],
             'Dance': [6, 4, 0, 3, 6, 4, 2, 6]
         }
+        
         freeze_support()
     
     
@@ -113,40 +118,74 @@ class AudioEqualizer:
                                          sample_rate, sample_width, channels)
         
 
+    def apply_gain(self, factors):
 
-    def butter_bandpass(self, lowcut, highcut, fs, order=5):
-        nyquist = 0.5 * fs
-        low = lowcut / nyquist
-        high = highcut / nyquist
-        b, a = butter(order, [low, high], btype='band')
-        return b, a
+        N = len(self.audio_array)
+        fs = int(self.audio_metadata["sample_rate"])
 
-    def apply_gain(self, band, gain):
-        fs = self.audio.frame_rate
-        band_filters = [
-            (20, 60), (60, 170), (170, 310), (310, 600), 
-            (600, 1000), (1000, 3000), (3000, 6000), (6000, 20000)
-        ]
-        low, high = band_filters[band]
-        b, a = self.butter_bandpass(low, high, fs)
-        filtered = lfilter(b, a, self.audio_array)
-        filtered = np.nan_to_num(filtered, nan=0.0, posinf=np.iinfo(np.int16).max, neginf=np.iinfo(np.int16).min)
-        filtered = np.clip(filtered, np.iinfo(np.int16).min, np.iinfo(np.int16).max)  # Clip values
-        filtered = filtered.astype(np.int16)
-        self.audio_array = deepcopy(self.full_audio_array)
-        self.audio_array += gain * filtered
+        # getting fft of the signal and subtracting amplitudes and phases
+        rfft_coeff = rfft(self.audio_array)
+        signal_rfft_Coeff_abs = np.abs(rfft_coeff)
+        signal_rfft_Coeff_angle = np.angle(rfft_coeff)
 
+        # getting frequencies in range 0 to fmax to access each coeff of rfft coefficients
+        frequencies = np.fft.rfftfreq(N, 1 / fs)
+        # plt.plot(frequencies, signal_rfft_Coeff_abs)
+        # plt.show()
+        
+        # The maximum frequency is half the sample rate
+        points_per_freq = len(frequencies) / (fs / 2)
+        
+        for idx in range(len(factors)):
+            low = (fs / 2)/len(factors) * idx
+            # print("low: ",low)
+            high = (((fs / 2)/len(factors)) * (idx + 1)) - 1
+            # print("high: ",high)
+
+            # filter that multiply frequency band (from low to high) by factor
+            for f in frequencies:
+                if low < f < high:
+                    f_idx = int(points_per_freq * f)
+                    signal_rfft_Coeff_abs[f_idx] = signal_rfft_Coeff_abs[f_idx] * factors[idx]
+                else:
+                    pass
+
+        # plt.plot(frequencies, signal_rfft_Coeff_abs)    
+        # plt.show()
+        # constructing fft coefficients again (from amplitudes and phases) after processing the amplitudes
+        new_rfft_coeff = np.zeros((len(frequencies),), dtype=complex)
+        for f in frequencies:
+            try:
+                f_idx = int(points_per_freq * f)
+                new_rfft_coeff[f_idx]= signal_rfft_Coeff_abs[f_idx]*cmath.exp(1j * signal_rfft_Coeff_angle[f_idx])
+            except:
+                pass
+
+        # constructing the new signal from the fft coeffs by inverse fft
+        modified_array = irfft(new_rfft_coeff).astype(np.int16)
+        modified_array = np.clip(modified_array, -32768, 32767)
         sample_width = self.audio.sample_width
         channels = self.audio.channels
         sample_rate = int(self.audio_metadata["sample_rate"])
-        
-        self.audio = self.numpy_to_audio(self.audio_array,
-                                         sample_rate, sample_width, channels)
-  
 
-    def set_gain(self, band, gain):
-        self.gains[band] = gain
-        self.apply_gain(band, gain)
+        self.audio = self.numpy_to_audio(modified_array, sample_rate, sample_width, channels)
+
+        return modified_array, fs
+
+    def set_gain(self, band_sliders):
+        factors = []
+        for i in range(len(band_sliders)):
+            factors.append(band_sliders[i].value())
+        
+        print(factors)
+        self.apply_gain(factors)
+        
+    def preset(self, preset_name):
+        if preset_name not in self.presets:
+            raise ValueError(f"Preset {preset_name} not found.")
+        gains = self.presets[preset_name]
+        for band, gain in enumerate(gains):
+            self.set_gain(band, gain)
 
     def preset(self, preset_name):
         if preset_name not in self.presets:
@@ -162,7 +201,7 @@ class AudioEqualizer:
     #         sample_width=self.audio.sample_width, 
     #         channels=self.audio.channels
     #     )
-
+        
 
         
 if __name__ == "__main__":

@@ -6,4 +6,4 @@ packages/
 ffmpeg.exe
 ffprobe.exe
 ffplay.exe
-
+*.mp3
