@@ -7,7 +7,7 @@ To clone the repository, type the command in any folder.
 git clone https://github.com/abeshahsan/Tune-it.git
 ```
 This will create a folder 'Tune-it' in that directory. 
-It will have a complete copy of this repository. With a '.git' folder inside.
+It will have a complete copy of this repository. With a '.git' folder inside it.
 
 ### Create the virtual environment
 To run any Python or pip command in your project, you will need to activate the virtual environment
